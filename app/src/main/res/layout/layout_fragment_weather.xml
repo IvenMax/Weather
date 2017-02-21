@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/value_24_px"
+        android:layout_marginRight="@dimen/value_24_px"
+        android:layout_marginTop="@dimen/value_20_px"
+        android:elevation="4dp"
+        app:cardBackgroundColor="@color/color_f4f4f4"
+        app:cardCornerRadius="@dimen/value_20_px"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/value_24_px">
+            <!--现在温度-->
+            <TextView
+                android:id="@+id/tv_now_tmp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="37℃"
+                android:textColor="@color/color_00DBFE"
+                android:textSize="30dp"/>
+            <!--最高温度-->
+            <TextView
+                android:id="@+id/tv_tmp_hight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/value_10_px"
+                android:layout_toRightOf="@id/tv_now_tmp"
+                android:text="10℃"
+                android:textColor="@color/color_00DBFE"/>
+            <!--最低温度-->
+            <TextView
+                android:id="@+id/tv_tmp_low"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_tmp_hight"
+                android:layout_marginLeft="@dimen/value_10_px"
+                android:layout_toRightOf="@id/tv_now_tmp"
+                android:text="-3℃"
+                android:textColor="@color/color_00DBFE"/>
+            <!--此时天气图标-->
+            <ImageView
+                android:id="@+id/iv_tmp_logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:scaleType="fitXY"
+                android:src="@mipmap/ic_launcher"/>
+            <!--现在天气描述-->
+            <TextView
+                android:id="@+id/tv_tmp_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_now_tmp"
+                android:layout_marginTop="@dimen/value_10_px"
+                android:text="小雪"
+                android:textColor="@color/color_333333"
+                android:textSize="20dp"/>
+<!--空气指数-->
+            <TextView
+                android:id="@+id/tv_zhishu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_tmp_txt"
+                android:layout_marginTop="@dimen/value_10_px"
+                android:text="空气指数: 23 | 良"
+                android:textColor="@color/color_333333"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:orientation="vertical"
+                >
+                <!--更新时间-->
+                <TextView
+                    android:id="@+id/tv_update_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="更新时间 : 14:23 "
+                    android:textColor="@color/color_666666"/>
+                <!--风向和风力-->
+                <TextView
+                    android:id="@+id/tv_wind_size"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/value_10_px"
+                    android:text="南风 : 3-4 级"
+                    android:textColor="@color/color_66666666"/>
+                <!--PM2.5-->
+                <TextView
+                    android:id="@+id/tv_pm25"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/value_10_px"
+                    android:text="PM2.5 : 40 μg/m³"
+                    android:textColor="@color/color_66666666"/>
+                <!--空气湿度-->
+                <TextView
+                    android:id="@+id/tv_hum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="空气湿度:90%"
+                    android:textColor="@color/color_66666666"/>
+            </LinearLayout>
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>
