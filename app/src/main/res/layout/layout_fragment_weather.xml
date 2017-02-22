@@ -50,8 +50,8 @@
             <!--此时天气图标-->
             <ImageView
                 android:id="@+id/iv_tmp_logo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_centerInParent="true"
                 android:scaleType="fitXY"
                 android:src="@mipmap/ic_launcher"/>
@@ -65,7 +65,7 @@
                 android:text="小雪"
                 android:textColor="@color/color_333333"
                 android:textSize="20dp"/>
-<!--空气指数-->
+            <!--空气指数-->
             <TextView
                 android:id="@+id/tv_zhishu"
                 android:layout_width="wrap_content"

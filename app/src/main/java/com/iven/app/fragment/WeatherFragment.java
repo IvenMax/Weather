@@ -14,8 +14,10 @@ import com.iven.app.MyApp;
 import com.iven.app.R;
 import com.iven.app.bean.TotalWeatherBean;
 import com.iven.app.utils.Api;
+import com.iven.app.utils.IconSetting;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -78,5 +80,7 @@ public class WeatherFragment extends Fragment {
         tv_tmp_hight.setText(String.format("%s℃", heWeather5Bean.getDaily_forecast().get(0).getTmp().getMax()));
         tv_tmp_low.setText(String.format("%s℃", heWeather5Bean.getDaily_forecast().get(0).getTmp().getMin()));
         tv_tmp_txt.setText(heWeather5Bean.getNow().getCond().getTxt());
+        tv_zhishu.setText("空气指数 : "+heWeather5Bean.getAqi().getCity().getAqi()+" | "+heWeather5Bean.getAqi().getCity().getQlty());
+        Picasso.with(getActivity()).load(IconSetting.getIconUrl(heWeather5Bean.getNow().getCond().getCode())).into(iv_tmp_logo);
     }
 }
