@@ -3,7 +3,6 @@ package com.iven.app.view;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,6 +31,7 @@ import java.util.List;
  */
 
 public class HistoryDialogFragment extends DialogFragment {
+    private static final String TAG = "zpy_HistoryDialogFragment";
     private Dialog mDialog;
     private DialogClickListener eventListener;// 按钮点击回调
     private TextView tv_left;
@@ -124,16 +124,18 @@ public class HistoryDialogFragment extends DialogFragment {
         lv_history.setAdapter(mAdapter = new CommonAdapter<HistoryOfTodayBean.ResultBean>(getActivity(), datas, R.layout.layout_item_histroy) {
             @Override
             public void convert(ViewHolder viewHolder, HistoryOfTodayBean.ResultBean item) {
-                viewHolder.setText(R.id.tv_history_time,item.getYear()+"年");
-                viewHolder.setText(R.id.tv_history_thing,item.getTitle());
+                viewHolder.setText(R.id.tv_history_time, item.getYear() + "年");
+                viewHolder.setText(R.id.tv_history_thing, item.getTitle());
             }
         });
         lv_history.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                HistoryOfTodayBean.ResultBean resultBean = datas.get(position);
                 Intent intent = new Intent();
                 intent.setClass(getActivity(), HistoryActivity.class);
-                ((Context)getActivity()).startActivity(intent);
+                intent.putExtra("resultBean",resultBean);
+                getActivity().startActivity(intent);
             }
         });
     }
