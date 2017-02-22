@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Display;
@@ -12,10 +13,12 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.iven.app.R;
+import com.iven.app.activity.HistoryActivity;
 import com.iven.app.adapter.CommonAdapter;
 import com.iven.app.adapter.ViewHolder;
 import com.iven.app.bean.HistoryOfTodayBean;
@@ -122,6 +125,14 @@ public class HistoryDialogFragment extends DialogFragment {
             public void convert(ViewHolder viewHolder, HistoryOfTodayBean.ResultBean item) {
                 viewHolder.setText(R.id.tv_history_time,item.getYear()+"年");
                 viewHolder.setText(R.id.tv_history_thing,item.getTitle());
+            }
+        });
+        lv_history.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), HistoryActivity.class);
+//                ((Context)getActivity()).startActivity(intent);
             }
         });
     }

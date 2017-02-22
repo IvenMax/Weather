@@ -4,12 +4,12 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -98,9 +98,14 @@ public class MenuActivity extends BaseActivity {
             }
         });
 
-        initTab();
         //左侧抽屉的内容的点击事件
         itemClick();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
+        super.onCreate(savedInstanceState, persistentState);
+        initTab();
     }
 
     private void showUpdateDialog(List<HistoryOfTodayBean.ResultBean> result) {
@@ -146,7 +151,6 @@ public class MenuActivity extends BaseActivity {
                 Gson gson = new Gson();
                 HistoryOfTodayBean historyOfTodayBean = gson.fromJson(s, HistoryOfTodayBean.class);
                 List<HistoryOfTodayBean.ResultBean> result = historyOfTodayBean.getResult();
-                Log.e(TAG, "onSuccess: 114" + "行 = " + result.size());
                 showUpdateDialog(result);
             }
         });
