@@ -3,6 +3,7 @@ package com.iven.app.view;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -132,7 +133,7 @@ public class HistoryDialogFragment extends DialogFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent();
                 intent.setClass(getActivity(), HistoryActivity.class);
-//                ((Context)getActivity()).startActivity(intent);
+                ((Context)getActivity()).startActivity(intent);
             }
         });
     }

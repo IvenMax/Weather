@@ -4,7 +4,6 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -97,15 +96,9 @@ public class MenuActivity extends BaseActivity {
                 http_history(historyMonth, historyDay);
             }
         });
-
+        initTab();
         //左侧抽屉的内容的点击事件
         itemClick();
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
-        initTab();
     }
 
     private void showUpdateDialog(List<HistoryOfTodayBean.ResultBean> result) {
@@ -198,6 +191,9 @@ public class MenuActivity extends BaseActivity {
 
             }
         });
+        //默认选中第一个Tab
+        mTabLayout.getTabAt(0).select();
+        switchContent(null, mFragmentArrayList.get(0), "first");
     }
 
     @Override
@@ -268,6 +264,6 @@ public class MenuActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        switchContent(null, mFragmentArrayList.get(0), "first");
+//        switchContent(null, mFragmentArrayList.get(0), "first");
     }
 }
