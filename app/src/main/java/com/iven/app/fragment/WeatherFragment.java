@@ -33,7 +33,7 @@ import okhttp3.Response;
 public class WeatherFragment extends Fragment {
     private static final String TAG = "zpy_WeatherFragment";
     //现在温度,最高温度,最低温度,天气描述,空气指数,更新时间,风向风力,
-    private TextView tv_now_tmp, tv_tmp_hight, tv_tmp_low,tv_tmp_txt, tv_zhishu, tv_update_time, tv_wind_size, tv_pm25, tv_hum;
+    private TextView tv_now_tmp, tv_tmp_hight, tv_tmp_low, tv_tmp_txt, tv_zhishu, tv_update_time, tv_wind_size, tv_pm25, tv_hum;
     private ImageView iv_tmp_logo;
 
     @Nullable
@@ -80,7 +80,18 @@ public class WeatherFragment extends Fragment {
         tv_tmp_hight.setText(String.format("%s℃", heWeather5Bean.getDaily_forecast().get(0).getTmp().getMax()));
         tv_tmp_low.setText(String.format("%s℃", heWeather5Bean.getDaily_forecast().get(0).getTmp().getMin()));
         tv_tmp_txt.setText(heWeather5Bean.getNow().getCond().getTxt());
-        tv_zhishu.setText("空气指数 : "+heWeather5Bean.getAqi().getCity().getAqi()+" | "+heWeather5Bean.getAqi().getCity().getQlty());
+        tv_zhishu.setText("空气指数 : " + heWeather5Bean.getAqi().getCity().getAqi() + " | " + heWeather5Bean.getAqi().getCity().getQlty());
         Picasso.with(getActivity()).load(IconSetting.getIconUrl(heWeather5Bean.getNow().getCond().getCode())).into(iv_tmp_logo);
+        tv_wind_size.setText(String.format("%s : %s级", heWeather5Bean.getNow().getWind().getDir(), heWeather5Bean.getNow().getWind().getSc()));
+        tv_pm25.setText(String.format("PM2.5 : %sμg/m³", heWeather5Bean.getAqi().getCity().getPm25()));
+        tv_hum.setText(String.format("空气湿度 : %s%%", heWeather5Bean.getNow().getHum()));
+        String loc = heWeather5Bean.getBasic().getUpdate().getLoc();
+        //2017-02-22 12:52
+        String time = loc.substring(loc.length() - 6, loc.length());
+        String historyYear = loc.substring(0, 4);
+        String historyMonth = loc.substring(5, 7);
+        tv_update_time.setText(String.format("更新时间 : %s", time));
+
+
     }
 }

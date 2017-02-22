@@ -8,17 +8,29 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.iven.app.base.BaseActivity;
+import com.iven.app.bean.HistoryOfTodayBean;
 import com.iven.app.fragment.NewsFragment;
 import com.iven.app.fragment.ThirdFragment;
 import com.iven.app.fragment.WeatherFragment;
+import com.iven.app.utils.Api;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Response;
 
 public class MenuActivity extends BaseActivity {
     private static final String TAG = "zpy_MenuActivity";
@@ -68,7 +80,14 @@ public class MenuActivity extends BaseActivity {
         floating_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MenuActivity.this, "历史上的今天...", Toast.LENGTH_SHORT).show();
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                Date curDate = new Date(System.currentTimeMillis());//获取当前时间
+                String loc = formatter.format(curDate);
+                String time = loc.substring(loc.length() - 6, loc.length());
+                String historyYear = loc.substring(0, 4);
+                String historyMonth = loc.substring(5, 7);
+                String historyDay = loc.substring(8, 10);
+                http_history(historyMonth, historyDay);
             }
         });
 
@@ -76,6 +95,23 @@ public class MenuActivity extends BaseActivity {
         //左侧抽屉的内容的点击事件
         itemClick();
 
+
+    }
+
+    /**
+     * 查询历史上的几天的事件
+     */
+    private void http_history(String month, String day) {
+        String url = "month=" + month + "&day=" + day;
+        OkGo.get(Api.HISTORY_OF_TODAY + url).execute(new StringCallback() {
+            @Override
+            public void onSuccess(String s, Call call, Response response) {
+                Gson gson = new Gson();
+                HistoryOfTodayBean historyOfTodayBean = gson.fromJson(s, HistoryOfTodayBean.class);
+                List<HistoryOfTodayBean.ResultBean> result = historyOfTodayBean.getResult();
+                Log.e(TAG, "onSuccess: 114" + "行 = " +result.size());
+            }
+        });
 
     }
 
