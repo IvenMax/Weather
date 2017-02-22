@@ -23,6 +23,7 @@ import com.iven.app.fragment.ThirdFragment;
 import com.iven.app.fragment.WeatherFragment;
 import com.iven.app.utils.Api;
 import com.iven.app.utils.ScreenObserver;
+import com.iven.app.view.HistoryDialogFragment;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 
@@ -102,6 +103,21 @@ public class MenuActivity extends BaseActivity {
         itemClick();
     }
 
+    private void showUpdateDialog(List<HistoryOfTodayBean.ResultBean> result) {
+        String content = "1.修复xxx Bug;\\n2.更新UI界面.";
+        String apkUrl = "https://dbank.qrcb.com.cn/web/bao/Dbank_app_android.apk";
+        final HistoryDialogFragment dialogFragment = new HistoryDialogFragment(result, "title", content, null, "OK", new HistoryDialogFragment.DialogClickListener() {
+            @Override
+            public void leftEvent() {
+            }
+
+            @Override
+            public void rightEvent() {
+            }
+        });
+        dialogFragment.show(getFragmentManager(), "tag");
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -130,7 +146,8 @@ public class MenuActivity extends BaseActivity {
                 Gson gson = new Gson();
                 HistoryOfTodayBean historyOfTodayBean = gson.fromJson(s, HistoryOfTodayBean.class);
                 List<HistoryOfTodayBean.ResultBean> result = historyOfTodayBean.getResult();
-                Log.e(TAG, "onSuccess: 114" + "行 = " +result.size());
+                Log.e(TAG, "onSuccess: 114" + "行 = " + result.size());
+                showUpdateDialog(result);
             }
         });
 

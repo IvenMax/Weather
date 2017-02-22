@@ -16,8 +16,10 @@
     <dimen name="value_56_px">56px</dimen>
     <dimen name="value_60_px">60px</dimen>
     <dimen name="value_80_px">80px</dimen>
+    <dimen name="value_100_px">100px</dimen>
     <dimen name="value_120_px">120px</dimen>
     <dimen name="value_300_px">300px</dimen>
+    <dimen name="value_450_px">450px</dimen>
     <dimen name="value_600_px">600px</dimen>
     <dimen name="value_750_px">750px</dimen>
 </resources>
