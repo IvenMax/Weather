@@ -12,6 +12,8 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textColor="@color/color_333333"
+        android:paddingTop="@dimen/value_24_px"
+        android:paddingBottom="@dimen/value_24_px"
         android:text="历史上的今天"
         android:textSize="20sp"/>
 
@@ -19,6 +21,8 @@
         android:id="@+id/lv_history"
         android:overScrollMode="never"
         android:scrollbars="none"
+        android:divider="@color/color_33999999"
+        android:dividerHeight="@dimen/value_1_px"
         android:layout_width="match_parent"
         android:layout_height="@dimen/value_600_px">
 
