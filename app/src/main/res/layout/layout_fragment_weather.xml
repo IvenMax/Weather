@@ -19,15 +19,16 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:orientation="vertical"
                 android:background="@color/color_f4f4f4">
 
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/value_24_px"
                     android:layout_marginLeft="@dimen/value_24_px"
                     android:layout_marginRight="@dimen/value_24_px"
                     android:layout_marginTop="@dimen/value_20_px"
-                    android:layout_marginBottom="@dimen/value_24_px"
                     android:elevation="4dp"
                     app:cardBackgroundColor="@color/color_f4f4f4"
                     app:cardCornerRadius="@dimen/value_20_px"
@@ -131,6 +132,12 @@
                         </LinearLayout>
                     </RelativeLayout>
                 </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/id_recyclerview_horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+
             </LinearLayout>
         </ScrollView>
     </com.iven.app.view.PullToRefreshLayout>

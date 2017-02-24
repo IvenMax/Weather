@@ -3,6 +3,8 @@ package com.iven.app.fragment;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.iven.app.MyApp;
 import com.iven.app.R;
+import com.iven.app.adapter.WeaDataAdapter;
 import com.iven.app.bean.TotalWeatherBean;
 import com.iven.app.utils.Api;
 import com.iven.app.utils.IconSetting;
@@ -26,6 +29,9 @@ import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.request.BaseRequest;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import okhttp3.Call;
@@ -48,12 +54,20 @@ public class WeatherFragment extends Fragment {
     private ProgressBar progressBar;
     private ScrollView scrl_view_weather;
     private ImageView mImageView;
+    private ArrayList<TotalWeatherBean.HeWeather5Bean.DailyForecastBean> datas;
+    private RecyclerView mRecyclerView;
+    private WeaDataAdapter mWeaDataAdapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.layout_fragment_weather, container, false);
         tv_now_tmp = (TextView) view.findViewById(R.id.tv_now_tmp);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.id_recyclerview_horizontal);
+        //设置布局管理器
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        mRecyclerView.setLayoutManager(layoutManager);
         tv_tmp_hight = (TextView) view.findViewById(R.id.tv_tmp_hight);
         tv_tmp_low = (TextView) view.findViewById(R.id.tv_tmp_low);
         tv_tmp_txt = (TextView) view.findViewById(R.id.tv_tmp_txt);
@@ -83,7 +97,10 @@ public class WeatherFragment extends Fragment {
                 TotalWeatherBean totalWeatherBean = gson.fromJson(s, TotalWeatherBean.class);
                 List<TotalWeatherBean.HeWeather5Bean> heWeather5 = totalWeatherBean.getHeWeather5();
                 TotalWeatherBean.HeWeather5Bean heWeather5Bean = heWeather5.get(0);
+                datas = (ArrayList<TotalWeatherBean.HeWeather5Bean.DailyForecastBean>) heWeather5Bean.getDaily_forecast();
+
                 setData(heWeather5Bean);
+                fillDatatoRecyclerView(datas);
                 T.showLong(getActivity(), "更新完成");
             }
 
@@ -97,9 +114,34 @@ public class WeatherFragment extends Fragment {
             public void onAfter(String s, Exception e) {
                 super.onAfter(s, e);
                 mNewLoadingUtil.stopShowLoading();
-                VibrationUtils.vibrate(getActivity(),100);
+                VibrationUtils.vibrate(getActivity(), 100);
             }
         });
+    }
+
+    private void fillDatatoRecyclerView(ArrayList<TotalWeatherBean.HeWeather5Bean.DailyForecastBean> daily) {
+        datas = daily;
+        Collections.sort(daily, new Comparator<TotalWeatherBean.HeWeather5Bean.DailyForecastBean>() {
+            @Override
+            public int compare(TotalWeatherBean.HeWeather5Bean.DailyForecastBean lhs, TotalWeatherBean.HeWeather5Bean.DailyForecastBean rhs) {
+                // 排序找到温度最低的，按照最低温度升序排列
+                return Integer.parseInt(lhs.getTmp().getMin()) - Integer.parseInt(rhs.getTmp().getMin());
+            }
+        });
+
+        int low = Integer.parseInt(daily.get(0).getTmp().getMin());
+
+        Collections.sort(daily, new Comparator<TotalWeatherBean.HeWeather5Bean.DailyForecastBean>() {
+            @Override
+            public int compare(TotalWeatherBean.HeWeather5Bean.DailyForecastBean lhs, TotalWeatherBean.HeWeather5Bean.DailyForecastBean rhs) {
+                // 排序找到温度最高的，按照最高温度降序排列
+                return Integer.parseInt(rhs.getTmp().getMax()) - Integer.parseInt(lhs.getTmp().getMax());
+            }
+        });
+        int high = Integer.parseInt(daily.get(0).getTmp().getMax());
+
+        mWeaDataAdapter = new WeaDataAdapter(getActivity(), datas, low, high);
+        mRecyclerView.setAdapter(mWeaDataAdapter);
     }
 
     private void initPullToRefreshLayout(View view) {
@@ -131,7 +173,7 @@ public class WeatherFragment extends Fragment {
         View headerView = mPullToRefreshView.setRefreshView(R.layout.layout_head);
         progressBar = (ProgressBar) headerView.findViewById(R.id.pb_view);
         mImageView = (ImageView) headerView.findViewById(R.id.text_view);
-//        LoadingUtils.startLoading(mImageView);
+        //        LoadingUtils.startLoading(mImageView);
         progressBar.setVisibility(View.VISIBLE);
         mImageView.setVisibility(View.GONE);
 
