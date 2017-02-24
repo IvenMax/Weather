@@ -15,8 +15,10 @@ import com.iven.app.R;
 import com.iven.app.bean.TotalWeatherBean;
 import com.iven.app.utils.Api;
 import com.iven.app.utils.IconSetting;
+import com.iven.app.utils.NewLoadingUtil;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
+import com.lzy.okgo.request.BaseRequest;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -35,6 +37,7 @@ public class WeatherFragment extends Fragment {
     //现在温度,最高温度,最低温度,天气描述,空气指数,更新时间,风向风力,
     private TextView tv_now_tmp, tv_tmp_hight, tv_tmp_low, tv_tmp_txt, tv_zhishu, tv_update_time, tv_wind_size, tv_pm25, tv_hum;
     private ImageView iv_tmp_logo;
+    private NewLoadingUtil mNewLoadingUtil;
 
     @Nullable
     @Override
@@ -60,6 +63,7 @@ public class WeatherFragment extends Fragment {
     }
 
     private void http_request(String city) {
+        mNewLoadingUtil = NewLoadingUtil.getInstance(getActivity());
         OkGo.get(Api.HEWEATHER5_WEATHER + city).execute(new StringCallback() {
             @Override
             public void onSuccess(String s, Call call, Response response) {
@@ -68,6 +72,18 @@ public class WeatherFragment extends Fragment {
                 List<TotalWeatherBean.HeWeather5Bean> heWeather5 = totalWeatherBean.getHeWeather5();
                 TotalWeatherBean.HeWeather5Bean heWeather5Bean = heWeather5.get(0);
                 setData(heWeather5Bean);
+            }
+
+            @Override
+            public void onBefore(BaseRequest request) {
+                super.onBefore(request);
+                mNewLoadingUtil.startShowLoading();
+            }
+
+            @Override
+            public void onAfter(String s, Exception e) {
+                super.onAfter(s, e);
+                mNewLoadingUtil.stopShowLoading();
             }
         });
     }
