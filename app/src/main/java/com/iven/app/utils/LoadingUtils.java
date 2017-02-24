@@ -15,13 +15,13 @@ public class LoadingUtils {
 
     public static void startLoading(ImageView imageView) {
         imageView.setVisibility(View.VISIBLE);
-        drawable = (AnimationDrawable) imageView.getDrawable();
-        drawable.start();
+        LoadingUtils.drawable = (AnimationDrawable) imageView.getBackground();
+        LoadingUtils.drawable.start();
     }
 
     public static void stopLoading(ImageView imageView) {
         imageView.setVisibility(View.GONE);
-        drawable = (AnimationDrawable) imageView.getDrawable();
+        drawable = (AnimationDrawable) imageView.getBackground();
         drawable.stop();
     }
 }
