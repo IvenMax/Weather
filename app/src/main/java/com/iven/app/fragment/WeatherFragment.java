@@ -24,6 +24,7 @@ import com.iven.app.utils.NewLoadingUtil;
 import com.iven.app.utils.T;
 import com.iven.app.utils.VibrationUtils;
 import com.iven.app.view.PullToRefreshLayout;
+import com.iven.app.view.WeatherView;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.request.BaseRequest;
@@ -53,6 +54,7 @@ public class WeatherFragment extends Fragment {
     private ScrollView scrl_view_weather;
     private ImageView mImageView;
     private ArrayList<DailyForecastBean> mDailyForecastBeanArrayList;
+    private WeatherView mWeatherView;
 
     @Nullable
     @Override
@@ -73,6 +75,7 @@ public class WeatherFragment extends Fragment {
         iv_tmp_logo = (ImageView) view.findViewById(R.id.iv_tmp_logo);
         scrl_view_weather = (ScrollView) view.findViewById(R.id.scrl_view_weather);
         mDailyForecastBeanArrayList = new ArrayList<>();
+        mWeatherView = ((WeatherView) view.findViewById(R.id.weather_view));
         initPullToRefreshLayout(view);
         return view;
     }
@@ -110,6 +113,7 @@ public class WeatherFragment extends Fragment {
                     mDailyForecastBeanArrayList.add(bean);
                 }
                 Log.e(TAG, "onSuccess: 102" + "行 = " +mDailyForecastBeanArrayList.size());
+                mWeatherView.setForcastData(mDailyForecastBeanArrayList);
                 setData(heWeather5Bean);
                 T.showLong(getActivity(), "更新完成");
             }
