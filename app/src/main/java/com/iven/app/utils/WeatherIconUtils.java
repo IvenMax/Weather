@@ -36,8 +36,10 @@ public class WeatherIconUtils {
                 return R.drawable.w16;
             case "冰雹":
                 return R.drawable.w15;
+            case "霾":
+                return R.mipmap.m502;
         }
-        return R.drawable.w0;
+        return R.mipmap.n999;
     }
 
     public static int getNightWeatherPic(String weatherName) {
@@ -66,7 +68,9 @@ public class WeatherIconUtils {
                 return R.drawable.w16;
             case "冰雹":
                 return R.drawable.w15;
+            case "霾":
+                return R.mipmap.m502;
         }
-        return R.drawable.w30;
+        return R.mipmap.n999;
     }
 }
