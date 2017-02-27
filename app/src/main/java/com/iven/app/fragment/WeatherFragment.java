@@ -4,7 +4,7 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.iven.app.MyApp;
 import com.iven.app.R;
-import com.iven.app.adapter.WeaDataAdapter;
+import com.iven.app.bean.DailyForecastBean;
 import com.iven.app.bean.TotalWeatherBean;
 import com.iven.app.utils.Api;
 import com.iven.app.utils.IconSetting;
@@ -30,8 +30,6 @@ import com.lzy.okgo.request.BaseRequest;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import okhttp3.Call;
@@ -42,7 +40,7 @@ import okhttp3.Response;
  * @date 2017/2/21 14:42
  * @Description
  */
-
+// TODO: 2017/2/27 添加网络检测
 public class WeatherFragment extends Fragment {
     //刷新相关
     private PullToRefreshLayout mPullToRefreshView;
@@ -54,20 +52,16 @@ public class WeatherFragment extends Fragment {
     private ProgressBar progressBar;
     private ScrollView scrl_view_weather;
     private ImageView mImageView;
-    private ArrayList<TotalWeatherBean.HeWeather5Bean.DailyForecastBean> datas;
-    private RecyclerView mRecyclerView;
-    private WeaDataAdapter mWeaDataAdapter;
+    private ArrayList<DailyForecastBean> mDailyForecastBeanArrayList;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.layout_fragment_weather, container, false);
         tv_now_tmp = (TextView) view.findViewById(R.id.tv_now_tmp);
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.id_recyclerview_horizontal);
         //设置布局管理器
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        mRecyclerView.setLayoutManager(layoutManager);
         tv_tmp_hight = (TextView) view.findViewById(R.id.tv_tmp_hight);
         tv_tmp_low = (TextView) view.findViewById(R.id.tv_tmp_low);
         tv_tmp_txt = (TextView) view.findViewById(R.id.tv_tmp_txt);
@@ -78,6 +72,7 @@ public class WeatherFragment extends Fragment {
         tv_hum = (TextView) view.findViewById(R.id.tv_hum);
         iv_tmp_logo = (ImageView) view.findViewById(R.id.iv_tmp_logo);
         scrl_view_weather = (ScrollView) view.findViewById(R.id.scrl_view_weather);
+        mDailyForecastBeanArrayList = new ArrayList<>();
         initPullToRefreshLayout(view);
         return view;
     }
@@ -90,6 +85,7 @@ public class WeatherFragment extends Fragment {
 
     private void http_request(String city) {
         mNewLoadingUtil = NewLoadingUtil.getInstance(getActivity());
+        Log.e(TAG, "http_request: 83" + "行 = " +Api.HEWEATHER5_WEATHER+city);
         OkGo.get(Api.HEWEATHER5_WEATHER + city).execute(new StringCallback() {
             @Override
             public void onSuccess(String s, Call call, Response response) {
@@ -97,10 +93,24 @@ public class WeatherFragment extends Fragment {
                 TotalWeatherBean totalWeatherBean = gson.fromJson(s, TotalWeatherBean.class);
                 List<TotalWeatherBean.HeWeather5Bean> heWeather5 = totalWeatherBean.getHeWeather5();
                 TotalWeatherBean.HeWeather5Bean heWeather5Bean = heWeather5.get(0);
-                datas = (ArrayList<TotalWeatherBean.HeWeather5Bean.DailyForecastBean>) heWeather5Bean.getDaily_forecast();
-
+                List<TotalWeatherBean.HeWeather5Bean.DailyForecastBean> daily_forecast = heWeather5Bean.getDaily_forecast();
+                int size = daily_forecast.size();
+                for (int i = 0; i < size; i++) {
+                    TotalWeatherBean.HeWeather5Bean.DailyForecastBean dailyForecastBean = daily_forecast.get(i);
+                    DailyForecastBean bean = new DailyForecastBean();
+                    bean.setDate(dailyForecastBean.getDate());
+                    bean.setCode_d(dailyForecastBean.getCond().getCode_d());
+                    bean.setCode_n(dailyForecastBean.getCond().getCode_n());
+                    bean.setTxt_d(dailyForecastBean.getCond().getTxt_d());
+                    bean.setTxt_n(dailyForecastBean.getCond().getTxt_n());
+                    bean.setMax(dailyForecastBean.getTmp().getMax());
+                    bean.setMin(dailyForecastBean.getTmp().getMin());
+                    bean.setWind_dir(dailyForecastBean.getWind().getDir());
+                    bean.setWind_spd(dailyForecastBean.getWind().getSpd());
+                    mDailyForecastBeanArrayList.add(bean);
+                }
+                Log.e(TAG, "onSuccess: 102" + "行 = " +mDailyForecastBeanArrayList.size());
                 setData(heWeather5Bean);
-                fillDatatoRecyclerView(datas);
                 T.showLong(getActivity(), "更新完成");
             }
 
@@ -116,33 +126,15 @@ public class WeatherFragment extends Fragment {
                 mNewLoadingUtil.stopShowLoading();
                 VibrationUtils.vibrate(getActivity(), 100);
             }
+
+            @Override
+            public void onError(Call call, Response response, Exception e) {
+                super.onError(call, response, e);
+                T.showLong(getActivity(),"更新失败");
+            }
         });
     }
 
-    private void fillDatatoRecyclerView(ArrayList<TotalWeatherBean.HeWeather5Bean.DailyForecastBean> daily) {
-        datas = daily;
-        Collections.sort(daily, new Comparator<TotalWeatherBean.HeWeather5Bean.DailyForecastBean>() {
-            @Override
-            public int compare(TotalWeatherBean.HeWeather5Bean.DailyForecastBean lhs, TotalWeatherBean.HeWeather5Bean.DailyForecastBean rhs) {
-                // 排序找到温度最低的，按照最低温度升序排列
-                return Integer.parseInt(lhs.getTmp().getMin()) - Integer.parseInt(rhs.getTmp().getMin());
-            }
-        });
-
-        int low = Integer.parseInt(daily.get(0).getTmp().getMin());
-
-        Collections.sort(daily, new Comparator<TotalWeatherBean.HeWeather5Bean.DailyForecastBean>() {
-            @Override
-            public int compare(TotalWeatherBean.HeWeather5Bean.DailyForecastBean lhs, TotalWeatherBean.HeWeather5Bean.DailyForecastBean rhs) {
-                // 排序找到温度最高的，按照最高温度降序排列
-                return Integer.parseInt(rhs.getTmp().getMax()) - Integer.parseInt(lhs.getTmp().getMax());
-            }
-        });
-        int high = Integer.parseInt(daily.get(0).getTmp().getMax());
-
-        mWeaDataAdapter = new WeaDataAdapter(getActivity(), datas, low, high);
-        mRecyclerView.setAdapter(mWeaDataAdapter);
-    }
 
     private void initPullToRefreshLayout(View view) {
         //-------------------------下拉刷新

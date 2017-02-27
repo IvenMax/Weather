@@ -70,11 +70,9 @@ public class NewLoadingUtil {
             if (newload == null && activity != null) {
                 newload = new NewLoadingUtil(activity);
                 newload.startShowLoading();
-                Log.e(TAG, "getInstance: 创建dialog");
             } else {
 
                 if (pd == null || !pd.isShowing()) {
-                    Log.e(TAG, "getInstance: 异常启动");
                     newload.startShowLoading();
                 }
             }
@@ -120,11 +118,9 @@ public class NewLoadingUtil {
         //        }
         if (pd == null) {
             pd = createDialog();
-            Log.e(TAG, "startShowLoading: if");
             pd.show();
 
         } else if (pd != null && !pd.isShowing()) {
-            Log.e(TAG, "startShowLoading: else");
             pd.show();
         }
 
@@ -137,7 +133,6 @@ public class NewLoadingUtil {
         if (this.pd != null && this.pd.isShowing() && activity != null && !activity.isFinishing()) {
 
             try {
-                Log.e(TAG, "stopShowLoading: ");
                 //stopAnimation();
                 // loading.clearAnimation();
                 this.pd.dismiss();
@@ -164,7 +159,6 @@ public class NewLoadingUtil {
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                Log.e(TAG, "onAnimationStart: 启动动画");
             }
 
             @Override

@@ -133,10 +133,6 @@
                     </RelativeLayout>
                 </android.support.v7.widget.CardView>
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/id_recyclerview_horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
 
             </LinearLayout>
         </ScrollView>
