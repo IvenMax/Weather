@@ -1,13 +1,13 @@
 package com.iven.app;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -74,7 +74,7 @@ public class MenuActivity extends BaseActivity {
         //底部导航栏 && Fragment
         mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
         mFragmentArrayList = new ArrayList<>();
-        manager = getFragmentManager();
+        manager = getSupportFragmentManager();
         mWeatherFragment = new WeatherFragment();
         mNewsFragment = new NewsFragment();
         mThirdFragment = new ThirdFragment();
@@ -264,6 +264,6 @@ public class MenuActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-//        switchContent(null, mFragmentArrayList.get(0), "first");
+        //        switchContent(null, mFragmentArrayList.get(0), "first");
     }
 }

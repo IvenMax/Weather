@@ -1,11 +1,11 @@
 package com.iven.app.base;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +23,7 @@ import com.iven.app.utils.L;
  * @desc
  */
 
-public abstract class BaseActivity extends Activity implements View.OnClickListener {
+public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener {
     // TODO: 2016/12/4 状态栏沉浸的方法
     //http://jaeger.itscoder.com/android/2016/02/15/status-bar-demo.html
     public static String TAG = "";//全局TAG
@@ -70,7 +70,8 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //取消默认标题
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         context = this;
         //打印生命周期日志
         TAG = "IVEN_" + context.getClass().getSimpleName();

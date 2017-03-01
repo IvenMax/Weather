@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -96,7 +95,18 @@ public class NewLoadingUtil {
     };
     private TextView tv_loading;
 
+    /**
+     * 设置添加屏幕的背景透明度
+     *
+     * @param bgAlpha
+     */
+    public void backgroundAlpha(float bgAlpha) {
+        WindowManager.LayoutParams lp = activity.getWindow().getAttributes();
+        lp.alpha = bgAlpha; //0.0-1.0
+        activity.getWindow().setAttributes(lp);
+    }
     public void startShowLoading() {
+        backgroundAlpha(0.8f);
         //        if (showLoading && activity != null && pd == null) {
         //            if (pd != null) {
         //                pd.cancel();
@@ -129,6 +139,7 @@ public class NewLoadingUtil {
 
 
     public void stopShowLoading() {
+        backgroundAlpha(1.0f);
         // 回调
         if (this.pd != null && this.pd.isShowing() && activity != null && !activity.isFinishing()) {
 

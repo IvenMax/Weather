@@ -1,14 +1,15 @@
 package com.iven.app.fragment;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 
 import com.iven.app.MyApp;
 import com.iven.app.R;
+import com.iven.app.adapter.ViewPagerAdapter;
 import com.iven.app.bean.DailyForecastBean;
 import com.iven.app.bean.TotalWeatherBean;
 import com.iven.app.okgo.JsonCallback;
@@ -54,10 +56,10 @@ public class WeatherFragment extends Fragment {
     private ScrollView scrl_view_weather;
     private ImageView mImageView;
     private ArrayList<DailyForecastBean> mDailyForecastBeanArrayList;
-    private NoScrollViewPager vp_noviewpager;
     private List<Fragment> mFragments;
-    private Button btn_left;
-    private Button btn_right;
+    private NoScrollViewPager vp_noviewpager;
+    private ViewPagerAdapter mViewPagerAdapter;
+    private TabLayout tablayout_vp;
 
     @Nullable
     @Override
@@ -84,25 +86,25 @@ public class WeatherFragment extends Fragment {
         iv_tmp_logo = (ImageView) view.findViewById(R.id.iv_tmp_logo);
         scrl_view_weather = (ScrollView) view.findViewById(R.id.scrl_view_weather);
         mDailyForecastBeanArrayList = new ArrayList<>();
-        vp_noviewpager = (NoScrollViewPager) view.findViewById(R.id.vp_noviewpager);
         initPullToRefreshLayout(view);
+        /***********中间ViewPager相关**********/
         mFragments = new ArrayList<>();
         mFragments.add(new Left7DaysFragment());
         mFragments.add(new Right7DaysFragment());
-        btn_left = (Button) view.findViewById(R.id.btn_left);
-        btn_right = (Button) view.findViewById(R.id.btn_right);
-        btn_left.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                vp_noviewpager.setCurrentItem(0);
-            }
-        });
-        btn_left.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                vp_noviewpager.setCurrentItem(1);
-            }
-        });
+        vp_noviewpager = (NoScrollViewPager) view.findViewById(R.id.vp_noviewpager);
+        mViewPagerAdapter = new ViewPagerAdapter(getFragmentManager(), mFragments);
+        vp_noviewpager.setAdapter(mViewPagerAdapter);
+        tablayout_vp = (TabLayout) view.findViewById(R.id.tablayout_vp);
+        tablayout_vp.addTab(tablayout_vp.newTab().setText("天气"));
+        tablayout_vp.addTab(tablayout_vp.newTab().setText("走势"));
+        /**
+         * 此处有坑。。。setupWithViewPager方法会自动将Tab清空...
+         * //tablayout_vp.getTabAt(0).setText("");
+         * or
+         * //在适配器里边重写getPageTitle()方法返回新的Tab的名字
+         */
+        tablayout_vp.setupWithViewPager(vp_noviewpager);
+        /***********中间ViewPager相关**********/
     }
 
     @Override
@@ -223,5 +225,36 @@ public class WeatherFragment extends Fragment {
         tv_update_time.setText(String.format("更新时间 : %s", time));
 
 
+    }
+
+    /**
+     * 设置添加屏幕的背景透明度
+     *
+     * @param bgAlpha
+     */
+    public void backgroundAlpha(float bgAlpha) {
+        WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
+        lp.alpha = bgAlpha; //0.0-1.0
+        getActivity().getWindow().setAttributes(lp);
+    }
+
+    /**
+     * 选择七日天气的TabLayout的控制器
+     */
+    private class onPagerTabSelectedListener implements TabLayout.OnTabSelectedListener {
+        @Override
+        public void onTabSelected(TabLayout.Tab tab) {
+
+        }
+
+        @Override
+        public void onTabUnselected(TabLayout.Tab tab) {
+
+        }
+
+        @Override
+        public void onTabReselected(TabLayout.Tab tab) {
+
+        }
     }
 }
