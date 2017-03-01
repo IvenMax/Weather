@@ -8,25 +8,25 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.iven.app.MyApp;
 import com.iven.app.R;
 import com.iven.app.bean.DailyForecastBean;
 import com.iven.app.bean.TotalWeatherBean;
+import com.iven.app.okgo.JsonCallback;
 import com.iven.app.utils.Api;
 import com.iven.app.utils.IconSetting;
 import com.iven.app.utils.NewLoadingUtil;
 import com.iven.app.utils.T;
 import com.iven.app.utils.VibrationUtils;
+import com.iven.app.view.NoScrollViewPager;
 import com.iven.app.view.PullToRefreshLayout;
-import com.iven.app.view.WeatherView;
 import com.lzy.okgo.OkGo;
-import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.request.BaseRequest;
 import com.squareup.picasso.Picasso;
 
@@ -54,12 +54,21 @@ public class WeatherFragment extends Fragment {
     private ScrollView scrl_view_weather;
     private ImageView mImageView;
     private ArrayList<DailyForecastBean> mDailyForecastBeanArrayList;
-    private WeatherView mWeatherView;
+    private NoScrollViewPager vp_noviewpager;
+    private List<Fragment> mFragments;
+    private Button btn_left;
+    private Button btn_right;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.layout_fragment_weather, container, false);
+        init(view);
+        return view;
+    }
+
+    //实例化组件
+    private void init(View view) {
         tv_now_tmp = (TextView) view.findViewById(R.id.tv_now_tmp);
         //设置布局管理器
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -75,9 +84,25 @@ public class WeatherFragment extends Fragment {
         iv_tmp_logo = (ImageView) view.findViewById(R.id.iv_tmp_logo);
         scrl_view_weather = (ScrollView) view.findViewById(R.id.scrl_view_weather);
         mDailyForecastBeanArrayList = new ArrayList<>();
-        mWeatherView = ((WeatherView) view.findViewById(R.id.weather_view));
+        vp_noviewpager = (NoScrollViewPager) view.findViewById(R.id.vp_noviewpager);
         initPullToRefreshLayout(view);
-        return view;
+        mFragments = new ArrayList<>();
+        mFragments.add(new Left7DaysFragment());
+        mFragments.add(new Right7DaysFragment());
+        btn_left = (Button) view.findViewById(R.id.btn_left);
+        btn_right = (Button) view.findViewById(R.id.btn_right);
+        btn_left.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                vp_noviewpager.setCurrentItem(0);
+            }
+        });
+        btn_left.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                vp_noviewpager.setCurrentItem(1);
+            }
+        });
     }
 
     @Override
@@ -88,12 +113,10 @@ public class WeatherFragment extends Fragment {
 
     private void http_request(String city) {
         mNewLoadingUtil = NewLoadingUtil.getInstance(getActivity());
-        Log.e(TAG, "http_request: 83" + "行 = " +Api.HEWEATHER5_WEATHER+city);
-        OkGo.get(Api.HEWEATHER5_WEATHER + city).execute(new StringCallback() {
+        Log.e(TAG, "http_request: 83" + "行 = " + Api.HEWEATHER5_WEATHER + city);
+        OkGo.get(Api.HEWEATHER5_WEATHER + city).execute(new JsonCallback<TotalWeatherBean>() {
             @Override
-            public void onSuccess(String s, Call call, Response response) {
-                Gson gson = new Gson();
-                TotalWeatherBean totalWeatherBean = gson.fromJson(s, TotalWeatherBean.class);
+            public void onSuccess(TotalWeatherBean totalWeatherBean, Call call, Response response) {
                 List<TotalWeatherBean.HeWeather5Bean> heWeather5 = totalWeatherBean.getHeWeather5();
                 TotalWeatherBean.HeWeather5Bean heWeather5Bean = heWeather5.get(0);
                 List<TotalWeatherBean.HeWeather5Bean.DailyForecastBean> daily_forecast = heWeather5Bean.getDaily_forecast();
@@ -112,8 +135,7 @@ public class WeatherFragment extends Fragment {
                     bean.setWind_spd(dailyForecastBean.getWind().getSpd());
                     mDailyForecastBeanArrayList.add(bean);
                 }
-                Log.e(TAG, "onSuccess: 102" + "行 = " +mDailyForecastBeanArrayList.size());
-                mWeatherView.setForcastData(mDailyForecastBeanArrayList);
+                Log.e(TAG, "onSuccess: 102" + "行 = " + mDailyForecastBeanArrayList.size());
                 setData(heWeather5Bean);
                 T.showLong(getActivity(), "更新完成");
             }
@@ -125,8 +147,8 @@ public class WeatherFragment extends Fragment {
             }
 
             @Override
-            public void onAfter(String s, Exception e) {
-                super.onAfter(s, e);
+            public void onAfter(TotalWeatherBean totalWeatherBean, Exception e) {
+                super.onAfter(totalWeatherBean, e);
                 mNewLoadingUtil.stopShowLoading();
                 VibrationUtils.vibrate(getActivity(), 100);
             }
@@ -134,7 +156,7 @@ public class WeatherFragment extends Fragment {
             @Override
             public void onError(Call call, Response response, Exception e) {
                 super.onError(call, response, e);
-                T.showLong(getActivity(),"更新失败");
+                T.showLong(getActivity(), "更新失败");
             }
         });
     }

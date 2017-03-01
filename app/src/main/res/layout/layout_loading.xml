@@ -31,7 +31,7 @@
                 android:layout_width="40dip"
                 android:layout_height="40dip"
                 android:layout_gravity="center"
-                android:src="@mipmap/umeng_xp_loading"
+                android:src="@mipmap/ptr_circle_loading"
                 android:visibility="visible"/>
 
         </FrameLayout>
