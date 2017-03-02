@@ -48,6 +48,12 @@ public class Left7DaysAdapter extends RecyclerView.Adapter<Left7DaysAdapter.MyVi
         String code_d = datas.get(position).getCond().getCode_d();
         String code_n = datas.get(position).getCond().getCode_n();
         String dir = datas.get(position).getWind().getDir();
+        if (dir.contains("无")){
+            dir = "无";
+        }
+        if(dir.length()>3){
+            dir = dir.substring(0,2);
+        }
         String sc = datas.get(position).getWind().getSc();
         String max = datas.get(position).getTmp().getMax();
         String min = datas.get(position).getTmp().getMin();
