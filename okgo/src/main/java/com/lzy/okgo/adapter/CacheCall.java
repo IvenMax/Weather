@@ -15,6 +15,7 @@ import com.lzy.okgo.model.Response;
 import com.lzy.okgo.request.BaseRequest;
 import com.lzy.okgo.utils.HeaderParser;
 import com.lzy.okgo.utils.HttpUtils;
+import com.lzy.okgo.utils.L;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
@@ -134,6 +135,7 @@ public class CacheCall<T> implements Call<T> {
 
             @Override
             public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
+                L.e("json数据", "---------" + request.url().toString() + "  ------json数据---------------");
                 int responseCode = response.code();
                 //304缓存数据
                 if (responseCode == 304 && cacheMode == CacheMode.DEFAULT) {

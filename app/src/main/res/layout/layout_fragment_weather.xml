@@ -149,7 +149,7 @@
                 android:id="@+id/vp_noviewpager"
                 android:layout_width="match_parent"
                 android:layout_marginTop="@dimen/value_20_px"
-                android:layout_height="200dp"/>
+                android:layout_height="@dimen/value_700_px"/>
             </LinearLayout>
         </ScrollView>
     </com.iven.app.view.PullToRefreshLayout>

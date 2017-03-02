@@ -111,8 +111,13 @@ public class WeatherFragment extends Fragment {
     public void onResume() {
         super.onResume();
         http_request(MyApp.currentCity);
+
     }
 
+    /**
+     * 全部信息请求
+     * @param city 城市
+     */
     private void http_request(String city) {
         mNewLoadingUtil = NewLoadingUtil.getInstance(getActivity());
         Log.e(TAG, "http_request: 83" + "行 = " + Api.HEWEATHER5_WEATHER + city);
@@ -137,7 +142,6 @@ public class WeatherFragment extends Fragment {
                     bean.setWind_spd(dailyForecastBean.getWind().getSpd());
                     mDailyForecastBeanArrayList.add(bean);
                 }
-                Log.e(TAG, "onSuccess: 102" + "行 = " + mDailyForecastBeanArrayList.size());
                 setData(heWeather5Bean);
                 T.showLong(getActivity(), "更新完成");
             }
@@ -163,7 +167,9 @@ public class WeatherFragment extends Fragment {
         });
     }
 
-
+    /**
+     * 初始化下拉刷新
+     */
     private void initPullToRefreshLayout(View view) {
         //-------------------------下拉刷新
         mPullToRefreshView = (PullToRefreshLayout) view.findViewById(R.id.pull_to_refresh);

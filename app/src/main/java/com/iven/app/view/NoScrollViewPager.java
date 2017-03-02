@@ -22,10 +22,11 @@ public class NoScrollViewPager extends ViewPager {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent arg0) {
+    public boolean onTouchEvent(MotionEvent ev) {
         return false;
     }
 
+    // TODO: 2017/3/2 还需要看事件分发的源码啊啊啊啊啊
     @Override
     public boolean onInterceptTouchEvent(MotionEvent arg0) {
         return false;

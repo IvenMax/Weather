@@ -21,7 +21,6 @@ import com.iven.app.fragment.NewsFragment;
 import com.iven.app.fragment.ThirdFragment;
 import com.iven.app.fragment.WeatherFragment;
 import com.iven.app.utils.Api;
-import com.iven.app.utils.ScreenObserver;
 import com.iven.app.view.HistoryDialogFragment;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
@@ -49,7 +48,6 @@ public class MenuActivity extends BaseActivity {
     /**
      * 锁屏监听
      */
-    public ScreenObserver mScreenObserver;
 
     @Override
     public int setLayout() {
@@ -120,16 +118,6 @@ public class MenuActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         /**-----锁屏监听-----**/
-        mScreenObserver = new ScreenObserver(this);
-        mScreenObserver.requestScreenStateUpdate(new ScreenObserver.ScreenStateListener() {
-            @Override
-            public void onScreenOn() {
-            }
-
-            @Override
-            public void onScreenOff() {
-            }
-        });
         /**-----锁屏监听-----**/
     }
 

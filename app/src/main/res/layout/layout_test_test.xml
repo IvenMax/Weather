@@ -4,14 +4,12 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <ImageView
+    <TextView
+        android:id="@+id/text_test"
         android:layout_width="wrap_content"
+        android:textSize="30dp"
+        android:layout_margin="@dimen/value_24_px"
         android:layout_height="wrap_content"
-        android:src="@mipmap/ic_launcher"/>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/test_rrrrr"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        ></android.support.v7.widget.RecyclerView>
+        android:layout_gravity="center"
+        android:text="111"/>
 </LinearLayout>

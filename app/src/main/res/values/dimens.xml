@@ -3,8 +3,9 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="value_1_px">1px</dimen>
-    <dimen name="value_8_px">8px</dimen>
+    <dimen name="value_3_px">3px</dimen>
     <dimen name="value_4_px">4px</dimen>
+    <dimen name="value_8_px">8px</dimen>
     <dimen name="value_10_px">10px</dimen>
     <dimen name="value_16_px">16px</dimen>
     <dimen name="value_20_px">20px</dimen>
@@ -21,5 +22,6 @@
     <dimen name="value_300_px">300px</dimen>
     <dimen name="value_450_px">450px</dimen>
     <dimen name="value_600_px">600px</dimen>
+    <dimen name="value_700_px">700px</dimen>
     <dimen name="value_750_px">750px</dimen>
 </resources>
