@@ -95,8 +95,8 @@ public class WeatherFragment extends Fragment {
         mViewPagerAdapter = new ViewPagerAdapter(getFragmentManager(), mFragments);
         vp_noviewpager.setAdapter(mViewPagerAdapter);
         tablayout_vp = (TabLayout) view.findViewById(R.id.tablayout_vp);
-        tablayout_vp.addTab(tablayout_vp.newTab().setText("天气"));
-        tablayout_vp.addTab(tablayout_vp.newTab().setText("走势"));
+        tablayout_vp.addTab(tablayout_vp.newTab().setText("列表"));
+        tablayout_vp.addTab(tablayout_vp.newTab().setText("趋势"));
         /**
          * 此处有坑。。。setupWithViewPager方法会自动将Tab清空...
          * //tablayout_vp.getTabAt(0).setText("");

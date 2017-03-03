@@ -66,8 +66,7 @@ public class Left7DaysAdapter extends RecyclerView.Adapter<Left7DaysAdapter.MyVi
         } else {
             holder.tv_leftdays_wind_sc.setText(String.format("%s级", sc));
         }
-        String temp = "11/-1℃";
-//        String temp = max + "/" + min+"℃" ;//+"℃"
+        String temp = max + "/" + min+"℃" ;//+"℃"
         SpannableString spannableString = SpannableStrings.setTextColor(temp, Color.parseColor("#F56A13"), 0, temp.indexOf("/"));
         holder.tv_leftdays_temp.setText(spannableString);
         Picasso.with(mContext).load(IconSetting.getIconUrl(code_d)).into(holder.iv_leftdays_img_d);
