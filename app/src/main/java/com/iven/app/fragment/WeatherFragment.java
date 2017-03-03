@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -56,10 +57,12 @@ public class WeatherFragment extends Fragment {
     private ScrollView scrl_view_weather;
     private ImageView mImageView;
     private ArrayList<DailyForecastBean> mDailyForecastBeanArrayList;
+    private ArrayList<TotalWeatherBean.HeWeather5Bean.HourlyForecastBean> mHourlyForecastBeanArrayList;
     private List<Fragment> mFragments;
     private NoScrollViewPager vp_noviewpager;
     private ViewPagerAdapter mViewPagerAdapter;
     private TabLayout tablayout_vp;
+    private LinearLayout ll_hourly;
 
     @Nullable
     @Override
@@ -86,6 +89,7 @@ public class WeatherFragment extends Fragment {
         iv_tmp_logo = (ImageView) view.findViewById(R.id.iv_tmp_logo);
         scrl_view_weather = (ScrollView) view.findViewById(R.id.scrl_view_weather);
         mDailyForecastBeanArrayList = new ArrayList<>();
+        mHourlyForecastBeanArrayList = new ArrayList<>();
         initPullToRefreshLayout(view);
         /***********中间ViewPager相关**********/
         mFragments = new ArrayList<>();
@@ -105,6 +109,7 @@ public class WeatherFragment extends Fragment {
          */
         tablayout_vp.setupWithViewPager(vp_noviewpager);
         /***********中间ViewPager相关**********/
+        ll_hourly = (LinearLayout) view.findViewById(R.id.ll_hourly);
     }
 
     @Override
@@ -143,9 +148,12 @@ public class WeatherFragment extends Fragment {
                     bean.setWind_spd(dailyForecastBean.getWind().getSpd());
                     mDailyForecastBeanArrayList.add(bean);
                 }
+                mHourlyForecastBeanArrayList.addAll(heWeather5Bean.getHourly_forecast());
+                setHourlyData();
                 setData(heWeather5Bean);
                 T.showLong(getActivity(), "更新完成");
             }
+
 
             @Override
             public void onBefore(BaseRequest request) {
@@ -166,6 +174,27 @@ public class WeatherFragment extends Fragment {
                 T.showLong(getActivity(), "更新失败");
             }
         });
+    }
+
+    /**
+     * 实时天气展示
+     */
+    private void setHourlyData() {
+        int size = mHourlyForecastBeanArrayList.size();
+        Log.e(TAG, "setHourlyData: 188" + "行 = " + size);
+        for (int i = 0; i < size; i++) {
+            View view = LayoutInflater.from(getActivity()).inflate(R.layout.layout_item_hourly, null, false);
+            TextView tv_hour_time = (TextView) view.findViewById(R.id.tv_hour_time);
+            TextView tv_hour_temp = (TextView) view.findViewById(R.id.tv_hour_temp);
+            TextView tv_hour_wind = (TextView) view.findViewById(R.id.tv_hour_wind);
+            TextView tv_hour_wind_dir = (TextView) view.findViewById(R.id.tv_hour_wind_dir);
+            tv_hour_time.setText(String.format("时间 : %s", mHourlyForecastBeanArrayList.get(i).getDate().substring(mHourlyForecastBeanArrayList.get(i).getDate().length() - 5, mHourlyForecastBeanArrayList.get(i).getDate().length())));
+            tv_hour_temp.setText(String.format("%s℃", String.format("温度 : %s", mHourlyForecastBeanArrayList.get(i).getTmp())));
+            tv_hour_wind.setText(String.format("风力 : %s", mHourlyForecastBeanArrayList.get(i).getWind().getSc()));
+            tv_hour_wind_dir.setText(String.format("风向 : %s", mHourlyForecastBeanArrayList.get(i).getWind().getDir()));
+            ll_hourly.addView(view);
+        }
+
     }
 
     /**
