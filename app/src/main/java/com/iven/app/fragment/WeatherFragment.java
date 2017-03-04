@@ -1,5 +1,6 @@
 package com.iven.app.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -14,16 +15,19 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.iven.app.MyApp;
 import com.iven.app.R;
+import com.iven.app.activity.WeatherSuggestionActivity;
 import com.iven.app.adapter.ViewPagerAdapter;
 import com.iven.app.bean.DailyForecastBean;
 import com.iven.app.bean.TotalWeatherBean;
 import com.iven.app.okgo.JsonCallback;
 import com.iven.app.utils.Api;
+import com.iven.app.utils.Constant;
 import com.iven.app.utils.IconSetting;
 import com.iven.app.utils.NewLoadingUtil;
 import com.iven.app.utils.RexUtils;
@@ -47,7 +51,7 @@ import okhttp3.Response;
  * @Description
  */
 // TODO: 2017/2/27 添加网络检测
-public class WeatherFragment extends Fragment {
+public class WeatherFragment extends Fragment implements View.OnClickListener {
     //刷新相关
     private PullToRefreshLayout mPullToRefreshView;
     private static final String TAG = "zpy_WeatherFragment";
@@ -118,8 +122,8 @@ public class WeatherFragment extends Fragment {
         tablayout_vp.setupWithViewPager(vp_noviewpager);
         /***********中间ViewPager相关**********/
         ll_hourly = (LinearLayout) view.findViewById(R.id.ll_hourly);
+        setClickListener(view);
     }
-
 
     /**
      * 全部信息请求
@@ -202,12 +206,12 @@ public class WeatherFragment extends Fragment {
                 tv_hour_wind_dir.setText(String.format("风向:%s", mHourlyForecastBeanArrayList.get(i).getWind().getDir()));
                 ll_hourly.addView(view);
             }
-        }else {//夜间22点之后应该没有实时数据了
+        } else {//夜间22点之后应该没有实时数据了
             TextView textView = new TextView(getActivity());
             textView.setText("今日已无实时数据");
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             textView.setGravity(Gravity.CENTER);
-            ll_hourly.addView(textView,params);
+            ll_hourly.addView(textView, params);
         }
 
 
@@ -288,6 +292,63 @@ public class WeatherFragment extends Fragment {
         WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
         lp.alpha = bgAlpha; //0.0-1.0
         getActivity().getWindow().setAttributes(lp);
+    }
+
+    /**
+     * 生活指数相关
+     *
+     * @param view
+     */
+    private void setClickListener(View view) {
+        RelativeLayout rl_suggestion_comf = (RelativeLayout) view.findViewById(R.id.rl_suggestion_comf);
+        RelativeLayout rl_suggestion_cw = (RelativeLayout) view.findViewById(R.id.rl_suggestion_cw);
+        RelativeLayout rl_suggestion_drsg = (RelativeLayout) view.findViewById(R.id.rl_suggestion_drsg);
+        RelativeLayout rl_suggestion_flu = (RelativeLayout) view.findViewById(R.id.rl_suggestion_flu);
+        RelativeLayout rl_suggestion_sport = (RelativeLayout) view.findViewById(R.id.rl_suggestion_sport);
+        RelativeLayout rl_suggestion_trav = (RelativeLayout) view.findViewById(R.id.rl_suggestion_trav);
+        RelativeLayout rl_suggestion_uv = (RelativeLayout) view.findViewById(R.id.rl_suggestion_uv);
+        RelativeLayout rl_suggestion_life = (RelativeLayout) view.findViewById(R.id.rl_suggestion_life);
+        rl_suggestion_comf.setOnClickListener(this);
+        rl_suggestion_cw.setOnClickListener(this);
+        rl_suggestion_drsg.setOnClickListener(this);
+        rl_suggestion_flu.setOnClickListener(this);
+        rl_suggestion_sport.setOnClickListener(this);
+        rl_suggestion_trav.setOnClickListener(this);
+        rl_suggestion_uv.setOnClickListener(this);
+        rl_suggestion_life.setOnClickListener(this);
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent intent = new Intent(getActivity(), WeatherSuggestionActivity.class);
+        switch (v.getId()) {
+            case R.id.rl_suggestion_comf://第一个
+                intent.putExtra(Constant.SUGGESTION_FLAG, 1);
+                break;
+            case R.id.rl_suggestion_cw://第2个
+                intent.putExtra(Constant.SUGGESTION_FLAG, 2);
+                break;
+            case R.id.rl_suggestion_drsg://第3个
+                intent.putExtra(Constant.SUGGESTION_FLAG, 3);
+                break;
+            case R.id.rl_suggestion_flu://第4个
+                intent.putExtra(Constant.SUGGESTION_FLAG, 4);
+                break;
+            case R.id.rl_suggestion_sport://第5个
+                intent.putExtra(Constant.SUGGESTION_FLAG, 5);
+                break;
+            case R.id.rl_suggestion_trav://第6个
+                intent.putExtra(Constant.SUGGESTION_FLAG, 6);
+                break;
+            case R.id.rl_suggestion_uv://第7个
+                intent.putExtra(Constant.SUGGESTION_FLAG, 7);
+                break;
+            case R.id.rl_suggestion_life://第8个
+                intent.putExtra(Constant.SUGGESTION_FLAG, 8);
+                break;
+        }
+        startActivity(intent);
     }
 
     /**

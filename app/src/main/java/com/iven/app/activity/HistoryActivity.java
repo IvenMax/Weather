@@ -1,7 +1,6 @@
 package com.iven.app.activity;
 
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,7 +25,7 @@ public class HistoryActivity extends BaseActivity {
     @Override
     public void setTitle() {
         title_title.setText("历史今天");
-        title_left.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.mipmap.editext_tip), null, null, null);
+        title_left.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.mipmap.title_back), null, null, null);
         title_left.setOnClickListener(this);
     }
 
@@ -61,7 +60,6 @@ public class HistoryActivity extends BaseActivity {
     public void widgetClick(View view) {
         switch (view.getId()) {
             case R.id.title_left:
-                Log.e(TAG, "widgetClick: 62" + "行 = ");
                 finish();
                 break;
             case R.id.tv_his_title:
