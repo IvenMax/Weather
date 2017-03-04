@@ -45,6 +45,8 @@ public class MenuActivity extends BaseActivity {
     private NewsFragment mNewsFragment;
     private ThirdFragment mThirdFragment;
     private FloatingActionButton floating_button;
+    private  List<HistoryOfTodayBean.ResultBean> historyList;
+
     /**
      * 锁屏监听
      */
@@ -84,16 +86,10 @@ public class MenuActivity extends BaseActivity {
         floating_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                Date curDate = new Date(System.currentTimeMillis());//获取当前时间
-                String loc = formatter.format(curDate);
-                String time = loc.substring(loc.length() - 6, loc.length());
-                String historyYear = loc.substring(0, 4);
-                String historyMonth = loc.substring(5, 7);
-                String historyDay = loc.substring(8, 10);
-                http_history(historyMonth, historyDay);
+                showUpdateDialog(historyList);
             }
         });
+        historyList = new ArrayList<>();
         initTab();
         //左侧抽屉的内容的点击事件
         itemClick();
@@ -119,6 +115,7 @@ public class MenuActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         /**-----锁屏监听-----**/
         /**-----锁屏监听-----**/
+        load_histrory();
     }
 
     /**
@@ -132,10 +129,21 @@ public class MenuActivity extends BaseActivity {
                 Gson gson = new Gson();
                 HistoryOfTodayBean historyOfTodayBean = gson.fromJson(s, HistoryOfTodayBean.class);
                 List<HistoryOfTodayBean.ResultBean> result = historyOfTodayBean.getResult();
-                showUpdateDialog(result);
+                historyList.addAll(result);
             }
         });
 
+    }
+
+    private void load_histrory() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date curDate = new Date(System.currentTimeMillis());//获取当前时间
+        String loc = formatter.format(curDate);
+        String time = loc.substring(loc.length() - 6, loc.length());
+        String historyYear = loc.substring(0, 4);
+        String historyMonth = loc.substring(5, 7);
+        String historyDay = loc.substring(8, 10);
+        http_history(historyMonth, historyDay);
     }
 
     /**

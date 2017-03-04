@@ -6,6 +6,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import com.iven.app.okgo.JsonCallback;
 import com.iven.app.utils.Api;
 import com.iven.app.utils.IconSetting;
 import com.iven.app.utils.NewLoadingUtil;
+import com.iven.app.utils.RexUtils;
 import com.iven.app.utils.T;
 import com.iven.app.utils.VibrationUtils;
 import com.iven.app.view.NoScrollViewPager;
@@ -72,6 +74,12 @@ public class WeatherFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        http_request(MyApp.currentCity);
+    }
+
     //实例化组件
     private void init(View view) {
         tv_now_tmp = (TextView) view.findViewById(R.id.tv_now_tmp);
@@ -112,12 +120,6 @@ public class WeatherFragment extends Fragment {
         ll_hourly = (LinearLayout) view.findViewById(R.id.ll_hourly);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        http_request(MyApp.currentCity);
-
-    }
 
     /**
      * 全部信息请求
@@ -148,6 +150,7 @@ public class WeatherFragment extends Fragment {
                     bean.setWind_spd(dailyForecastBean.getWind().getSpd());
                     mDailyForecastBeanArrayList.add(bean);
                 }
+                mHourlyForecastBeanArrayList.clear();//每次刷新的时候，先将原来的集合清空
                 mHourlyForecastBeanArrayList.addAll(heWeather5Bean.getHourly_forecast());
                 setHourlyData();
                 setData(heWeather5Bean);
@@ -181,19 +184,32 @@ public class WeatherFragment extends Fragment {
      */
     private void setHourlyData() {
         int size = mHourlyForecastBeanArrayList.size();
-        Log.e(TAG, "setHourlyData: 188" + "行 = " + size);
-        for (int i = 0; i < size; i++) {
-            View view = LayoutInflater.from(getActivity()).inflate(R.layout.layout_item_hourly, null, false);
-            TextView tv_hour_time = (TextView) view.findViewById(R.id.tv_hour_time);
-            TextView tv_hour_temp = (TextView) view.findViewById(R.id.tv_hour_temp);
-            TextView tv_hour_wind = (TextView) view.findViewById(R.id.tv_hour_wind);
-            TextView tv_hour_wind_dir = (TextView) view.findViewById(R.id.tv_hour_wind_dir);
-            tv_hour_time.setText(String.format("时间 : %s", mHourlyForecastBeanArrayList.get(i).getDate().substring(mHourlyForecastBeanArrayList.get(i).getDate().length() - 5, mHourlyForecastBeanArrayList.get(i).getDate().length())));
-            tv_hour_temp.setText(String.format("%s℃", String.format("温度 : %s", mHourlyForecastBeanArrayList.get(i).getTmp())));
-            tv_hour_wind.setText(String.format("风力 : %s", mHourlyForecastBeanArrayList.get(i).getWind().getSc()));
-            tv_hour_wind_dir.setText(String.format("风向 : %s", mHourlyForecastBeanArrayList.get(i).getWind().getDir()));
-            ll_hourly.addView(view);
+        ll_hourly.removeAllViews();
+        if (size != 0) {
+            for (int i = 0; i < size; i++) {
+                View view = LayoutInflater.from(getActivity()).inflate(R.layout.layout_item_hourly, null, false);
+                TextView tv_hour_time = (TextView) view.findViewById(R.id.tv_hour_time);
+                TextView tv_hour_temp = (TextView) view.findViewById(R.id.tv_hour_temp);
+                TextView tv_hour_wind = (TextView) view.findViewById(R.id.tv_hour_wind);
+                TextView tv_hour_wind_dir = (TextView) view.findViewById(R.id.tv_hour_wind_dir);
+                tv_hour_time.setText(String.format("时间:%s", mHourlyForecastBeanArrayList.get(i).getDate().substring(mHourlyForecastBeanArrayList.get(i).getDate().length() - 5, mHourlyForecastBeanArrayList.get(i).getDate().length())));
+                tv_hour_temp.setText(String.format("温度:%s℃", mHourlyForecastBeanArrayList.get(i).getTmp()));
+                if (RexUtils.isMatch(RexUtils.REGEX_ZH, mHourlyForecastBeanArrayList.get(i).getWind().getSc())) {
+                    tv_hour_wind.setText(String.format("风力:%s", mHourlyForecastBeanArrayList.get(i).getWind().getSc()));
+                } else {
+                    tv_hour_wind.setText(String.format("风力:%s级", mHourlyForecastBeanArrayList.get(i).getWind().getSc()));
+                }
+                tv_hour_wind_dir.setText(String.format("风向:%s", mHourlyForecastBeanArrayList.get(i).getWind().getDir()));
+                ll_hourly.addView(view);
+            }
+        }else {//夜间22点之后应该没有实时数据了
+            TextView textView = new TextView(getActivity());
+            textView.setText("今日已无实时数据");
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            textView.setGravity(Gravity.CENTER);
+            ll_hourly.addView(textView,params);
         }
+
 
     }
 
