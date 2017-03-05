@@ -12,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -33,7 +34,7 @@ import java.util.List;
 import okhttp3.Call;
 import okhttp3.Response;
 
-public class MenuActivity extends BaseActivity {
+public class MenuActivity extends BaseActivity implements WeatherFragment.onScrollBottomListener {
     private static final String TAG = "zpy_MenuActivity";
     private NavigationView navigation_view;
     private DrawerLayout mDrawerLayout;
@@ -45,7 +46,7 @@ public class MenuActivity extends BaseActivity {
     private NewsFragment mNewsFragment;
     private ThirdFragment mThirdFragment;
     private FloatingActionButton floating_button;
-    private  List<HistoryOfTodayBean.ResultBean> historyList;
+    private List<HistoryOfTodayBean.ResultBean> historyList;
 
     /**
      * 锁屏监听
@@ -261,5 +262,35 @@ public class MenuActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         //        switchContent(null, mFragmentArrayList.get(0), "first");
+    }
+
+    /**
+     * ScrollVie滑动到底部回调监听
+     *
+     * @param isBottom true=底部了
+     */
+    @Override
+    public void onScrollViewScrolTobottom(boolean isBottom) {
+        if (isBottom) {
+            floating_button.setVisibility(View.GONE);
+        } else {
+            floating_button.setVisibility(View.VISIBLE);
+        }
+    }
+
+    /**
+     * 渐变动画
+     *
+     * @param isShow true：表示是显示   false表示隐藏
+     */
+    private void showOrHideWithAlphaAnimation(boolean isShow) {
+        AlphaAnimation alphaAnimation;
+        if (!isShow) {
+            alphaAnimation = new AlphaAnimation(1.0f, 0.0f);
+        } else {
+            alphaAnimation = new AlphaAnimation(0.0f, 1.0f);
+        }
+        alphaAnimation.setDuration(4000);
+        floating_button.startAnimation(alphaAnimation);
     }
 }

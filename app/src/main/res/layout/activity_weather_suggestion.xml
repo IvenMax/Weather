@@ -4,14 +4,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@mipmap/bg_xue"
     android:orientation="vertical"
     tools:context="com.iven.app.activity.WeatherSuggestionActivity">
 
-    <include layout="@layout/layout_title"/>
+    <include
+        layout="@layout/layout_title"
+        android:background="@android:color/transparent"
+        />
 
     <TextView
+        android:id="@+id/tv_suggestion_sug"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/value_50_px"
+        android:layout_marginLeft="@dimen/value_24_px"
+        android:layout_marginRight="@dimen/value_24_px"
         android:gravity="center"
-        android:text="待完善..."/>
+        android:text=""
+        android:textColor="@color/white"
+        android:textSize="35dp"
+        />
+
+    <TextView
+        android:id="@+id/tv_suggestion_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/value_24_px"
+        android:layout_marginRight="@dimen/value_24_px"
+        android:layout_marginTop="@dimen/value_50_px"
+        android:text=""
+        android:textSize="20dp"
+        android:textColor="@color/white"
+        />
 </LinearLayout>

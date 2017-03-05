@@ -1,5 +1,6 @@
 package com.iven.app.fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -69,6 +71,7 @@ public class WeatherFragment extends Fragment implements View.OnClickListener {
     private ViewPagerAdapter mViewPagerAdapter;
     private TabLayout tablayout_vp;
     private LinearLayout ll_hourly;
+    private onScrollBottomListener mOnScrollBottomListener;
 
     @Nullable
     @Override
@@ -123,6 +126,22 @@ public class WeatherFragment extends Fragment implements View.OnClickListener {
         /***********中间ViewPager相关**********/
         ll_hourly = (LinearLayout) view.findViewById(R.id.ll_hourly);
         setClickListener(view);
+        scrl_view_weather.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int scrollY = scrl_view_weather.getScrollY();
+                if (scrl_view_weather.getChildAt(0).getHeight() - scrl_view_weather.getHeight() == scrl_view_weather.getScrollY()) {
+                    if (null != mOnScrollBottomListener) {
+                        mOnScrollBottomListener.onScrollViewScrolTobottom(true);
+                    }
+                }else {
+                    if (null != mOnScrollBottomListener){
+                        mOnScrollBottomListener.onScrollViewScrolTobottom(false);
+                    }
+                }
+                return false;
+            }
+        });
     }
 
     /**
@@ -351,23 +370,17 @@ public class WeatherFragment extends Fragment implements View.OnClickListener {
         startActivity(intent);
     }
 
-    /**
-     * 选择七日天气的TabLayout的控制器
-     */
-    private class onPagerTabSelectedListener implements TabLayout.OnTabSelectedListener {
-        @Override
-        public void onTabSelected(TabLayout.Tab tab) {
+    public interface onScrollBottomListener {
+        void onScrollViewScrolTobottom(boolean isBottom);
+    }
 
-        }
-
-        @Override
-        public void onTabUnselected(TabLayout.Tab tab) {
-
-        }
-
-        @Override
-        public void onTabReselected(TabLayout.Tab tab) {
-
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mOnScrollBottomListener= (onScrollBottomListener) activity;
+        } catch (Exception e) {
+            throw new ClassCastException(activity.toString() + " must implementonDateGetListener");
         }
     }
 }
