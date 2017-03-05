@@ -72,6 +72,8 @@ public class WeatherFragment extends Fragment implements View.OnClickListener {
     private TabLayout tablayout_vp;
     private LinearLayout ll_hourly;
     private onScrollBottomListener mOnScrollBottomListener;
+    private LinearLayout no_network;
+    private LinearLayout ll_net;
 
     @Nullable
     @Override
