@@ -12,17 +12,22 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
-import android.widget.Toast;
+import android.widget.PopupWindow;
 
 import com.google.gson.Gson;
 import com.iven.app.base.BaseActivity;
+import com.iven.app.bean.ActionItem;
 import com.iven.app.bean.HistoryOfTodayBean;
 import com.iven.app.fragment.NewsFragment;
 import com.iven.app.fragment.ThirdFragment;
 import com.iven.app.fragment.WeatherFragment;
 import com.iven.app.utils.Api;
+import com.iven.app.utils.T;
 import com.iven.app.view.HistoryDialogFragment;
+import com.iven.app.view.MyPopWindow;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 
@@ -47,6 +52,8 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
     private ThirdFragment mThirdFragment;
     private FloatingActionButton floating_button;
     private List<HistoryOfTodayBean.ResultBean> historyList;
+    private MyPopWindow titlePopup;
+    private List<ActionItem> items;
 
     /**
      * 锁屏监听
@@ -94,6 +101,7 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
         initTab();
         //左侧抽屉的内容的点击事件
         itemClick();
+        addPopWindow();
     }
 
     private void showUpdateDialog(List<HistoryOfTodayBean.ResultBean> result) {
@@ -204,7 +212,8 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
                 }
                 break;
             case R.id.title_right:
-                Toast.makeText(this, "todo", Toast.LENGTH_SHORT).show();
+                backgroundAlpha(0.7f);
+                titlePopup.show(view);
                 break;
             default:
                 break;
@@ -292,5 +301,51 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
         }
         alphaAnimation.setDuration(4000);
         floating_button.startAnimation(alphaAnimation);
+    }
+
+    /**
+     * 初始化PopWindow
+     */
+    private void addPopWindow() {
+        //实例化标题栏弹窗
+        titlePopup = new MyPopWindow(this, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        initData();
+        titlePopup.setOnDismissListener(new poponDismissListener());
+        titlePopup.setOnItemClickListener(new MyPopWindow.OnItemClickListener() {
+            @Override
+            public void onItemClickListener(List<ActionItem> actions, int position) {
+                ActionItem actionItem = actions.get(position);
+                Bundle bundle = new Bundle();
+                if (position == 0) {
+                    T.showShort(MenuActivity.this, "001");
+                } else {
+                    T.showShort(MenuActivity.this, "分享...");
+                }
+            }
+        });
+    }
+
+    /**
+     * 初始化数据
+     */
+    private void initData() {
+        items = new ArrayList<>();
+        items.add(new ActionItem(this, "001", R.mipmap.icon_info, MenuActivity.class));
+        items.add(new ActionItem(this, "分 享", R.mipmap.ic_share, MenuActivity.class));
+        //给标题栏弹窗添加子类
+        titlePopup.addAction(items);
+    }
+
+    class poponDismissListener implements PopupWindow.OnDismissListener {
+        @Override
+        public void onDismiss() {
+            backgroundAlpha(1f);
+        }
+    }
+
+    public void backgroundAlpha(float bgAlpha) {
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = bgAlpha; //0.0-1.0
+        getWindow().setAttributes(lp);
     }
 }

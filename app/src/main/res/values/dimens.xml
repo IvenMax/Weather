@@ -24,4 +24,5 @@
     <dimen name="value_600_px">600px</dimen>
     <dimen name="value_700_px">700px</dimen>
     <dimen name="value_750_px">750px</dimen>
+    <dimen name="value_10_dp">10dp</dimen>
 </resources>
