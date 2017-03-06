@@ -319,7 +319,9 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
                 if (position == 0) {
                     T.showShort(MenuActivity.this, "001");
                 } else {
-                    T.showShort(MenuActivity.this, "分享...");
+                    T.showShort(MenuActivity.this,"todo...");
+//                    ShareUtils shareUtils = new ShareUtils(MenuActivity.this,1,"url","title","content");
+//                    shareUtils.show();
                 }
             }
         });

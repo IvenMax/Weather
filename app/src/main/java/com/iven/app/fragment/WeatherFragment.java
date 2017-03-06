@@ -212,7 +212,7 @@ public class WeatherFragment extends Fragment implements View.OnClickListener {
         ll_hourly.removeAllViews();
         if (size != 0) {
             for (int i = 0; i < size; i++) {
-                View view = LayoutInflater.from(getActivity()).inflate(R.layout.layout_item_hourly, null, false);
+                View view = View.inflate(getActivity(),R.layout.layout_item_hourly,null);
                 TextView tv_hour_time = (TextView) view.findViewById(R.id.tv_hour_time);
                 TextView tv_hour_temp = (TextView) view.findViewById(R.id.tv_hour_temp);
                 TextView tv_hour_wind = (TextView) view.findViewById(R.id.tv_hour_wind);
