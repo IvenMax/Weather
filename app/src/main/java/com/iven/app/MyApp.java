@@ -6,6 +6,9 @@ import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheEntity;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.cookie.store.PersistentCookieStore;
+import com.umeng.socialize.Config;
+import com.umeng.socialize.PlatformConfig;
+import com.umeng.socialize.UMShareAPI;
 
 import java.util.logging.Level;
 
@@ -21,6 +24,29 @@ public class MyApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        initOkGoHttp();
+        initUMeng();
+    }
+
+    private void initUMeng() {
+        Config.DEBUG = true;//开启DEBUG模式
+        UMShareAPI.get(this);
+        {
+            //Demo里边的
+//            PlatformConfig.setWeixin("wxdc1e388c3822c80b", "3baf1193c85774b3fd9d18447d76cab0");
+//            PlatformConfig.setSinaWeibo("3921700954", "04b48b094faeb16683c32669824ebdad", "http://sns.whalecloud.com");
+//            PlatformConfig.setQQZone("100424468", "c7394704798a158208a74ab60104f0ba");
+            //自己申请的
+//            PlatformConfig.setWeixin("wxdc1e388c3822c80b", "3baf1193c85774b3fd9d18447d76cab0");
+            PlatformConfig.setSinaWeibo("2656078997", "80fae555d83800ded489e9a137a7f6d8", "http://sns.whalecloud.com");
+//            PlatformConfig.setQQZone("100424468", "c7394704798a158208a74ab60104f0ba");
+        }
+    }
+
+    /**
+     * 初始化OkGo网络请求框架
+     */
+    private void initOkGoHttp() {
         OkGo.init(this);
         try {
             //以下都不是必须的，根据需要自行选择,一般来说只需要 debug,缓存相关,cookie相关的 就可以了

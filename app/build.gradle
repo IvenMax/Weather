@@ -14,6 +14,7 @@ android {
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.debug
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
@@ -30,6 +31,14 @@ android {
                     output.outputFile = new File(outputFile.parent, fileName)
                 }
             }
+        }
+    }
+    signingConfigs {
+        debug {
+            storeFile file('iven.jks')
+            storePassword "111111"
+            keyAlias "iven"
+            keyPassword "111111"
         }
     }
 }
@@ -58,4 +67,12 @@ dependencies {
     compile 'com.squareup.retrofit2:adapter-rxjava:2.2.0'
     compile 'com.squareup.retrofit2:converter-gson:2.2.0'
     compile 'io.reactivex:rxandroid:1.2.1'
+    compile files('libs/SocialSDK_Sina_Full.jar')
+    compile files('libs/SocialSDK_sms.jar')
+    compile files('libs/SocialSDK_WeiXin_Full.jar')
+    compile files('libs/umeng_social_api.jar')
+    compile files('libs/umeng_social_net.jar')
+    compile files('libs/umeng_social_tool.jar')
+    compile files('libs/wechat-sdk-android-with-mta-1.0.2.jar')
+    compile files('libs/weiboSDKCore_3.1.4.jar')
 }

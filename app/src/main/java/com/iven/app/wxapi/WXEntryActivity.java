@@ -1,4 +1,4 @@
-package com.zpy.app.wxapi;
+package com.iven.app.wxapi;
 
 
 import com.umeng.socialize.weixin.view.WXCallbackActivity;

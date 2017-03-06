@@ -4,19 +4,28 @@
 
 package com.iven.app.utils;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
+import android.support.v4.app.ActivityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.widget.PopupWindow;
+import android.widget.Toast;
 
 import com.iven.app.R;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
 
 /**
  * 分享的面板, 一个popupWIndow
@@ -28,18 +37,9 @@ public class CustomShareBoard extends PopupWindow implements OnClickListener {
     private String share_url = "url";
     private int which_Page = -1;
     private Activity mActivity;
-    //    private final UMImage umImage;
-    //    private final UMShareAPI umShareAPI;
+    private final UMImage umImage;
+    private final UMShareAPI umShareAPI;
     private String sinaurl;
-
-    //    public CustomShareBoard(Activity activity, ShareUtils shareUtils, UMSocialService mController, int which_Page) {
-    //        super(activity);
-    //        this.mActivity = activity;
-    //        this.mController = mController;
-    //        this.shareUtils = shareUtils;
-    //        this.which_Page = which_Page;
-    //        initView(activity);
-    //    }
 
     /**
      * @param activity      当前Activity
@@ -54,11 +54,9 @@ public class CustomShareBoard extends PopupWindow implements OnClickListener {
         this.share_content = share_content;
         this.which_Page = which_Page;
         this.mActivity = activity;
-
         initView(activity);
-        //        umImage = new UMImage(mActivity, R.mipmap.share_ic);
-        //        umShareAPI = UMShareAPI.get(mActivity);
-
+        umImage = new UMImage(mActivity, R.mipmap.ic_launcher);
+        umShareAPI = UMShareAPI.get(mActivity);
     }
 
     @SuppressWarnings("deprecation")
@@ -88,27 +86,21 @@ public class CustomShareBoard extends PopupWindow implements OnClickListener {
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        String event_id = "";
         switch (id) {
             case R.id.wennxin:
-                //事件统计id
-                //                event_id = getEventID("208001002", "402001002");
-                ////                performShare(SHARE_MEDIA.WEIXIN);
+                performShare(SHARE_MEDIA.WEIXIN);
                 break;
             case R.id.wx_friends:
-                //朋友圈id
                 //                event_id = getEventID("208001003", "402001003");
                 //                performShare(SHARE_MEDIA.WEIXIN_CIRCLE);
                 break;
             case R.id.sina://新浪微博
-                //事件统计id
                 //                event_id = getEventID("208001001", "402001001");
                 //                performShare(SHARE_MEDIA.SINA);
                 break;
             case R.id.qq_friends:
-                //事件统计id
                 //                event_id = getEventID("208001004", "402001004");
-                //                performShare(SHARE_MEDIA.QQ);
+                performShare(SHARE_MEDIA.QQ);
 
                 break;
             case R.id.lin_message:
@@ -148,43 +140,54 @@ public class CustomShareBoard extends PopupWindow implements OnClickListener {
     }
 
 
-    //发短信
-    private void sendSMS() {
-        Uri smsToUri = Uri.parse("smsto:");
-        Intent sendIntent = new Intent(Intent.ACTION_VIEW, smsToUri);
-        //sendIntent.putExtra("address", "123456"); // 电话号码，这行去掉的话，默认就没有电话
-        sendIntent.putExtra("sms_body", "test" + "\n" + "url_test");
-        sendIntent.setType("vnd.android-dir/mms-sms");
-        mActivity.startActivityForResult(sendIntent, 1002);
-    }
-
-    /**
-     * sina授权
-     */
-    void sinaSSO() {
-        //        umShareAPI.deleteOauth(mActivity, SHARE_MEDIA.SINA, umAuthListener);
-    }
-
-/*    private void performShare(SHARE_MEDIA platform) {
+    private void performShare(SHARE_MEDIA platform) {
         //权限
         if (Build.VERSION.SDK_INT >= 23) {
             String[] mPermissionList = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.CALL_PHONE, Manifest.permission.READ_LOGS, Manifest.permission.READ_PHONE_STATE, Manifest.permission.SET_DEBUG_APP, Manifest.permission.SYSTEM_ALERT_WINDOW, Manifest.permission.GET_ACCOUNTS, Manifest.permission.WRITE_APN_SETTINGS};
             ActivityCompat.requestPermissions(mActivity, mPermissionList, 2000);
         }
-
         ShareAction shareAction = new ShareAction(mActivity);
+        shareAction.withText("分享......").withMedia(umImage);
+        shareAction.setPlatform(platform).setCallback(umShareListener).share();
+    }
 
-        if (SHARE_MEDIA.SINA.equals(platform)) {
-            sinaSSO();//取消授权
-            shareAction.withText(share_content.concat(share_url)).withMedia(umImage);
-        } else if (SHARE_MEDIA.SMS.equals(platform)) {//短信
-            shareAction.withText(share_title.concat(sinaurl));
-        } else {//其他
-            shareAction.withText(share_content).withTargetUrl(share_url).withTitle(share_title).withMedia(umImage);
+    /**
+     * 分享侦听
+     */
+    private UMShareListener umShareListener = new UMShareListener() {
+        @Override
+        public void onStart(SHARE_MEDIA share_media) {
+
         }
-       */
-   /*shareAction.setPlatform(platform).setCallback(umShareListener).share();*/
-    //    }
+
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+            L.d("plat", "platform" + platform);
+            if (!(SHARE_MEDIA.SMS == platform)) {
+                Toast.makeText(mActivity, "分享成功啦", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            if (t != null && platform != null && (platform == SHARE_MEDIA.WEIXIN || platform == SHARE_MEDIA.WEIXIN_CIRCLE)) {
+                T.showShort(mActivity, "您还没有安装微信");
+            } else if (t != null && platform != null && platform == SHARE_MEDIA.QQ) {
+                T.showShort(mActivity, "您还没有安装QQ");
+            } else {
+                Toast.makeText(mActivity, "分享失败啦", Toast.LENGTH_SHORT).show();
+            }
+            if (t != null) {
+                L.e("throw", "throw:" + t.getMessage());
+            }
+
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+            Toast.makeText(mActivity, "分享取消了", Toast.LENGTH_SHORT).show();
+        }
+    };
 
     /**
      * 授权侦听
@@ -209,44 +212,22 @@ public class CustomShareBoard extends PopupWindow implements OnClickListener {
             //            Toast.makeText(mActivity, share_media + "取消授权", Toast.LENGTH_SHORT).show();
         }
     };*/
+    //发短信
+    private void sendSMS() {
+        Uri smsToUri = Uri.parse("smsto:");
+        Intent sendIntent = new Intent(Intent.ACTION_VIEW, smsToUri);
+        //sendIntent.putExtra("address", "123456"); // 电话号码，这行去掉的话，默认就没有电话
+        sendIntent.putExtra("sms_body", "test" + "\n" + "url_test");
+        sendIntent.setType("vnd.android-dir/mms-sms");
+        mActivity.startActivityForResult(sendIntent, 1002);
+    }
 
     /**
-     * 分享侦听
+     * sina授权
      */
-/*    private UMShareListener umShareListener = new UMShareListener() {
-        @Override
-        public void onResult(SHARE_MEDIA platform) {
-            L.d("plat", "platform" + platform);
-            if (!(SHARE_MEDIA.SMS == platform)) {
-                Toast.makeText(mActivity, "分享成功啦", Toast.LENGTH_SHORT).show();
-            }
-            *//**== 事件统计 非页面 ==**//*
-            if (which_Page == 1 || which_Page == 2) {
-                String pageId = getPageId();
-                UmsAgent.onPause(GlobalContext.context, pageId);
-            }
-        }
-
-        @Override
-        public void onError(SHARE_MEDIA platform, Throwable t) {
-            if (t != null && platform != null && (platform == SHARE_MEDIA.WEIXIN || platform == SHARE_MEDIA.WEIXIN_CIRCLE)) {
-                T.showShort(mActivity, "您还没有安装微信");
-            } else if (t != null && platform != null && platform == SHARE_MEDIA.QQ) {
-                T.showShort(mActivity, "您还没有安装QQ");
-            } else {
-                Toast.makeText(mActivity, "分享失败啦", Toast.LENGTH_SHORT).show();
-            }
-            if (t != null) {
-                L.e("throw", "throw:" + t.getMessage());
-            }
-
-        }
-
-        @Override
-        public void onCancel(SHARE_MEDIA platform) {
-            Toast.makeText(mActivity, "分享取消了", Toast.LENGTH_SHORT).show();
-        }
-    };*/
+    void sinaSSO() {
+        //        umShareAPI.deleteOauth(mActivity, SHARE_MEDIA.SINA, umAuthListener);
+    }
 
     /**
      * 获取 短链接从新浪
