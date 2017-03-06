@@ -25,6 +25,8 @@ import com.iven.app.fragment.NewsFragment;
 import com.iven.app.fragment.ThirdFragment;
 import com.iven.app.fragment.WeatherFragment;
 import com.iven.app.utils.Api;
+import com.iven.app.utils.DialogUtils;
+import com.iven.app.utils.NetworkUtils;
 import com.iven.app.utils.T;
 import com.iven.app.view.HistoryDialogFragment;
 import com.iven.app.view.MyPopWindow;
@@ -104,6 +106,30 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
         addPopWindow();
     }
 
+    /**
+     * 是否有网络
+     */
+    private void isNetOk() {
+        boolean connected = NetworkUtils.isConnected(this);
+        if (!connected){
+            final DialogUtils dialogUtils = new DialogUtils(this, false);
+            dialogUtils.setDialogVerify(this, null, "网络已断开,前去设置", null, "OK", null, false, null, new DialogUtils.DialogClickListener() {
+                @Override
+                public void leftEvent() {
+                    T.showShort(MenuActivity.this, "取消");
+                    dialogUtils.closeDilog();
+                }
+
+                @Override
+                public void rightEvent() {
+                    dialogUtils.closeDilog();
+                    NetworkUtils.openNetWorkSettings(MenuActivity.this);
+                }
+            });
+            dialogUtils.showStandardDialog();
+        }
+    }
+
     private void showUpdateDialog(List<HistoryOfTodayBean.ResultBean> result) {
         String content = "1.修复xxx Bug;\\n2.更新UI界面.";
         String apkUrl = "https://dbank.qrcb.com.cn/web/bao/Dbank_app_android.apk";
@@ -124,7 +150,6 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
         super.onCreate(savedInstanceState);
         /**-----锁屏监听-----**/
         /**-----锁屏监听-----**/
-        load_histrory();
     }
 
     /**
@@ -271,6 +296,7 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
     protected void onResume() {
         super.onResume();
         //        switchContent(null, mFragmentArrayList.get(0), "first");
+        load_histrory();
     }
 
     /**

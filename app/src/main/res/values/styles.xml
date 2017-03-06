@@ -63,4 +63,16 @@
         <!-- 文字离圆点的距离 -->
         <attr name="textDotDistance" format="dimension"/>
     </declare-styleable>
+
+    <style name="textViewNoPadding">
+        <item name="android:lineSpacingMultiplier">0.9</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="gray_text_middle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/color_grays</item>
+    </style>
 </resources>
