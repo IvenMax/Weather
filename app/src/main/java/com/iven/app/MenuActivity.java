@@ -364,6 +364,7 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
         titlePopup.addAction(items);
     }
 
+
     class poponDismissListener implements PopupWindow.OnDismissListener {
         @Override
         public void onDismiss() {

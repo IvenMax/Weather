@@ -16,6 +16,5 @@
         android:gravity="center"
         android:text="点我一下,重新加载"
         android:textSize="20sp"
-        android:visibility="gone"
         tools:visibility="visible"/>
 </LinearLayout>

@@ -8,14 +8,15 @@
     <com.iven.app.view.PullToRefreshLayout
         android:id="@+id/pull_to_refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="visible">
 
         <ScrollView
             android:id="@+id/scrl_view_weather"
             android:layout_width="match_parent"
-            android:overScrollMode="never"
             android:layout_height="match_parent"
-            android:background="@color/color_f4f4f4">
+            android:background="@color/color_f4f4f4"
+            android:overScrollMode="never">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -155,9 +156,9 @@
                 <LinearLayout
                     android:id="@+id/ll_hourly"
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/value_24_px"
                     android:layout_marginRight="@dimen/value_24_px"
-                    android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                 </LinearLayout>

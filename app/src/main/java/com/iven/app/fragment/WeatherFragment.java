@@ -47,12 +47,13 @@ import java.util.List;
 import okhttp3.Call;
 import okhttp3.Response;
 
+import static com.iven.app.R.id.pull_to_refresh;
+
 /**
  * @author Iven
  * @date 2017/2/21 14:42
  * @Description
  */
-// TODO: 2017/2/27 添加网络检测
 public class WeatherFragment extends Fragment implements View.OnClickListener {
     //刷新相关
     private PullToRefreshLayout mPullToRefreshView;
@@ -72,8 +73,6 @@ public class WeatherFragment extends Fragment implements View.OnClickListener {
     private TabLayout tablayout_vp;
     private LinearLayout ll_hourly;
     private onScrollBottomListener mOnScrollBottomListener;
-    private LinearLayout no_network;
-    private LinearLayout ll_net;
 
     @Nullable
     @Override
@@ -88,7 +87,6 @@ public class WeatherFragment extends Fragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
         http_request(MyApp.currentCity);
     }
-
     //实例化组件
     private void init(View view) {
         tv_now_tmp = (TextView) view.findViewById(R.id.tv_now_tmp);
@@ -136,8 +134,8 @@ public class WeatherFragment extends Fragment implements View.OnClickListener {
                     if (null != mOnScrollBottomListener) {
                         mOnScrollBottomListener.onScrollViewScrolTobottom(true);
                     }
-                }else {
-                    if (null != mOnScrollBottomListener){
+                } else {
+                    if (null != mOnScrollBottomListener) {
                         mOnScrollBottomListener.onScrollViewScrolTobottom(false);
                     }
                 }
@@ -212,7 +210,7 @@ public class WeatherFragment extends Fragment implements View.OnClickListener {
         ll_hourly.removeAllViews();
         if (size != 0) {
             for (int i = 0; i < size; i++) {
-                View view = View.inflate(getActivity(),R.layout.layout_item_hourly,null);
+                View view = View.inflate(getActivity(), R.layout.layout_item_hourly, null);
                 TextView tv_hour_time = (TextView) view.findViewById(R.id.tv_hour_time);
                 TextView tv_hour_temp = (TextView) view.findViewById(R.id.tv_hour_temp);
                 TextView tv_hour_wind = (TextView) view.findViewById(R.id.tv_hour_wind);
@@ -243,7 +241,7 @@ public class WeatherFragment extends Fragment implements View.OnClickListener {
      */
     private void initPullToRefreshLayout(View view) {
         //-------------------------下拉刷新
-        mPullToRefreshView = (PullToRefreshLayout) view.findViewById(R.id.pull_to_refresh);
+        mPullToRefreshView = (PullToRefreshLayout) view.findViewById(pull_to_refresh);
         createRefreshView();
         mPullToRefreshView.setChildView(scrl_view_weather);//将ListView添加到Layout中去
 
@@ -380,7 +378,7 @@ public class WeatherFragment extends Fragment implements View.OnClickListener {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mOnScrollBottomListener= (onScrollBottomListener) activity;
+            mOnScrollBottomListener = (onScrollBottomListener) activity;
         } catch (Exception e) {
             throw new ClassCastException(activity.toString() + " must implementonDateGetListener");
         }
