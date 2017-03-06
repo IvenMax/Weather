@@ -27,6 +27,7 @@
             android:id="@+id/iv_leftdays_img_d"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/value_20_px"
             android:layout_gravity="center"
             android:src="@mipmap/ic_launcher"
             />
@@ -34,6 +35,7 @@
         <ImageView
             android:id="@+id/iv_leftdays_img_n"
             android:layout_width="wrap_content"
+            android:layout_marginTop="@dimen/value_20_px"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:src="@mipmap/ic_launcher"
@@ -43,6 +45,7 @@
             android:id="@+id/tv_leftdays_desc_d"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/value_20_px"
             android:gravity="center"
             android:text="小雨"
             android:textColor="@color/color_666666"
@@ -70,7 +73,7 @@
             android:id="@+id/tv_leftdays_temp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/value_10_px"
+            android:layout_marginTop="@dimen/value_20_px"
             android:gravity="center"
             android:text="15/6°"
             android:textColor="@color/color_666666"
@@ -81,7 +84,7 @@
             android:id="@+id/tv_leftdays_wind_dir"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/value_10_px"
+            android:layout_marginTop="@dimen/value_20_px"
             android:gravity="center"
             android:text="大风"
             android:textColor="@color/color_666666"
@@ -92,11 +95,28 @@
             android:id="@+id/tv_leftdays_wind_sc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/value_10_px"
             android:gravity="center"
+            android:layout_marginTop="@dimen/value_20_px"
             android:text="大风"
             android:textColor="@color/color_666666"
             android:textSize="10sp"
             />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="湿度"
+            android:layout_marginTop="@dimen/value_20_px"
+            android:textSize="14sp"
+            android:textColor="@color/color_666666"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:id="@+id/tv_leftdays_hum"
+            android:layout_marginTop="@dimen/value_20_px"
+            android:text="12"
+            android:textSize="12sp"
+            android:textColor="@color/color_666666"/>
     </LinearLayout>
 </LinearLayout>

@@ -23,6 +23,7 @@
     <dimen name="value_450_px">450px</dimen>
     <dimen name="value_600_px">600px</dimen>
     <dimen name="value_700_px">700px</dimen>
+    <dimen name="value_900_px">900px</dimen>
     <dimen name="value_750_px">750px</dimen>
     <dimen name="value_10_dp">10dp</dimen>
     <dimen name="normal_font">14sp</dimen>

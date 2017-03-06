@@ -44,7 +44,6 @@ public class Left7DaysFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.layout_fragment_left7days, container, false);
         init(view);
-        Log.e(TAG, "onCreateView: 47" + "行 = ");
         return view;
     }
 
@@ -68,14 +67,12 @@ public class Left7DaysFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.e(TAG, "onViewCreated: 71" + "行 = ");
         http(MyApp.currentCity);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.e(TAG, "onActivityCreated: 78" + "行 = ");
     }
 
     /**

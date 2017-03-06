@@ -150,13 +150,14 @@
                 <com.iven.app.view.NoScrollViewPager
                     android:id="@+id/vp_noviewpager"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/value_700_px"
+                    android:layout_height="@dimen/value_900_px"
                     android:layout_marginTop="@dimen/value_20_px"/>
                 <!--实时天气-->
                 <LinearLayout
                     android:id="@+id/ll_hourly"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/value_24_px"
                     android:layout_marginLeft="@dimen/value_24_px"
                     android:layout_marginRight="@dimen/value_24_px"
                     android:orientation="vertical">

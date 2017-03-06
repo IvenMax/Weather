@@ -4,8 +4,14 @@
               android:layout_height="match_parent"
               android:background="@color/color_f4f4f4"
               android:orientation="vertical">
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="todo"/>
+
+    <com.iven.app.view.weatherview.ZzWeatherView
+        android:id="@+id/weather_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/gray"
+        android:scrollbarSize="4dp"
+        android:scrollbarThumbHorizontal="@drawable/scroll_bar_thumb"
+        android:scrollbarTrackHorizontal="@drawable/scroll_bar_thumb"
+        />
 </LinearLayout>
