@@ -181,6 +181,7 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
         http_history(historyMonth, historyDay);
     }
 
+
     /**
      * 初始化底部导航栏
      */
