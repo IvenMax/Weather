@@ -27,6 +27,7 @@ import com.iven.app.fragment.WeatherFragment;
 import com.iven.app.utils.Api;
 import com.iven.app.utils.DialogUtils;
 import com.iven.app.utils.NetworkUtils;
+import com.iven.app.utils.ShareUtils;
 import com.iven.app.utils.T;
 import com.iven.app.view.HistoryDialogFragment;
 import com.iven.app.view.MyPopWindow;
@@ -345,9 +346,8 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
                 if (position == 0) {
                     T.showShort(MenuActivity.this, "001");
                 } else {
-                    T.showShort(MenuActivity.this,"todo...");
-//                    ShareUtils shareUtils = new ShareUtils(MenuActivity.this,1,"url","title","content");
-//                    shareUtils.show();
+                    ShareUtils shareUtils = new ShareUtils(MenuActivity.this,"天气预报","个人项目,天气预报,精准定位实时天气呦~","http://wwww.baidu.com");
+                    shareUtils.show();
                 }
             }
         });

@@ -26,6 +26,7 @@ import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMWeb;
 
 /**
  * 分享的面板, 一个popupWIndow
@@ -39,20 +40,19 @@ public class CustomShareBoard extends PopupWindow implements OnClickListener {
     private Activity mActivity;
     private final UMImage umImage;
     private final UMShareAPI umShareAPI;
-    private String sinaurl;
+    private String sinaurl = "http://www.baidu.com";
 
     /**
      * @param activity      当前Activity
-     * @param which_Page    页面区分 1:ISM完成期分享, 2:个人中心邀请好友 3:其他页面
      * @param share_title   分享title
      * @param share_url     分享url
      * @param share_content 分享正文
+     *                      顺序：title、content、url
      */
-    public CustomShareBoard(Activity activity, int which_Page, String share_title, String share_url, String share_content) {
+    public CustomShareBoard(Activity activity, String share_title, String share_content, String share_url) {
         this.share_title = share_title;
         this.share_url = share_url;
         this.share_content = share_content;
-        this.which_Page = which_Page;
         this.mActivity = activity;
         initView(activity);
         umImage = new UMImage(mActivity, R.mipmap.ic_launcher);
@@ -91,25 +91,20 @@ public class CustomShareBoard extends PopupWindow implements OnClickListener {
                 performShare(SHARE_MEDIA.WEIXIN);
                 break;
             case R.id.wx_friends:
-                //                event_id = getEventID("208001003", "402001003");
-                //                performShare(SHARE_MEDIA.WEIXIN_CIRCLE);
+                performShare(SHARE_MEDIA.WEIXIN_CIRCLE);
                 break;
             case R.id.sina://新浪微博
-                //                event_id = getEventID("208001001", "402001001");
-                //                performShare(SHARE_MEDIA.SINA);
+                T.showShort(mActivity,"待接入...");
+                //performShare(SHARE_MEDIA.SINA);
                 break;
             case R.id.qq_friends:
-                //                event_id = getEventID("208001004", "402001004");
                 performShare(SHARE_MEDIA.QQ);
-
                 break;
             case R.id.lin_message:
-                //事件统计id
-                //                event_id = getEventID("208001005", "402001005");
-                //                getShortUrlFromSina();
-
+                performShare(SHARE_MEDIA.SMS);
                 break;
             case R.id.tencent_wb:
+                T.showShort(mActivity,"待接入...");
                 //                performShare(SHARE_MEDIA.TENCENT);
                 break;
             case R.id.cancleShare:
@@ -117,28 +112,7 @@ public class CustomShareBoard extends PopupWindow implements OnClickListener {
             default:
                 break;
         }
-        if (which_Page == 1 || which_Page == 2) {
-            //事件统计
-            //            UmsAgent.onEvent(GlobalContext.context, event_id);
-        }
     }
-
-    /***
-     * 判断是完成期分享还是个人中心邀请好友
-     ***/
-    private String getPageId() {
-        String page = "";
-        switch (which_Page) {
-            case 1:
-                //                page = ConstantsEvent.ISM_COMPLETE_SHARE;
-                break;
-            case 2:
-                //                page = ConstantsEvent.SHARED_FRIEND;
-                break;
-        }
-        return page;
-    }
-
 
     private void performShare(SHARE_MEDIA platform) {
         //权限
@@ -147,7 +121,20 @@ public class CustomShareBoard extends PopupWindow implements OnClickListener {
             ActivityCompat.requestPermissions(mActivity, mPermissionList, 2000);
         }
         ShareAction shareAction = new ShareAction(mActivity);
-        shareAction.withText("分享......").withMedia(umImage);
+        //设置分享的链接
+        UMImage image = new UMImage(mActivity, R.mipmap.ic_share);//资源文件
+        //注意在新浪平台，缩略图属于必传参数，否则会报错
+        UMWeb web = new UMWeb(share_url);//分享链接
+        web.setTitle(share_title);//设置分享时候的显示标题
+        web.setDescription(share_content);//描述信息
+        web.setThumb(image);//图片显示
+        if (SHARE_MEDIA.SMS.equals(platform)) {//短信分享
+            shareAction.withText(share_title.concat(sinaurl));
+        } else if (SHARE_MEDIA.SINA.equals(platform)) {//新浪
+
+        } else {
+            shareAction.withMedia(umImage).withMedia(web);
+        }
         shareAction.setPlatform(platform).setCallback(umShareListener).share();
     }
 
@@ -157,12 +144,12 @@ public class CustomShareBoard extends PopupWindow implements OnClickListener {
     private UMShareListener umShareListener = new UMShareListener() {
         @Override
         public void onStart(SHARE_MEDIA share_media) {
-
         }
 
         @Override
         public void onResult(SHARE_MEDIA platform) {
             L.d("plat", "platform" + platform);
+            //只要并不是短信分享，都吐司提示
             if (!(SHARE_MEDIA.SMS == platform)) {
                 Toast.makeText(mActivity, "分享成功啦", Toast.LENGTH_SHORT).show();
             }
