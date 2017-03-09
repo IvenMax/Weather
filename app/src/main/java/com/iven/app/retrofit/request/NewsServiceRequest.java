@@ -8,7 +8,6 @@ import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
 import retrofit2.http.Path;
 import retrofit2.http.Url;
 import rx.Observable;
@@ -23,7 +22,6 @@ public interface NewsServiceRequest {
 
     @GET("nc/article/{postId}/full.html")
     Observable<Map<String, NewsDetailBean>> getNewDetail(
-            @Header("Cache-Control") String cacheControl,
             @Path("postId") String postId);
 
     @GET

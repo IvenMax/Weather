@@ -1,16 +1,23 @@
 package com.iven.app.fragment;
 
+import android.content.Intent;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
 import com.iven.app.R;
+import com.iven.app.activity.NewsDetailActivity;
+import com.iven.app.adapter.NewsListAdapter;
 import com.iven.app.base.BaseFragment;
 import com.iven.app.bean.news.NewsSummaryBean;
 import com.iven.app.retrofit.RetrofitNewsUtil;
 import com.iven.app.retrofit.request.NewsServiceRequest;
 import com.iven.app.utils.ApiConstants;
+import com.iven.app.utils.Constant;
+import com.iven.app.utils.NewLoadingUtil;
+import com.iven.app.utils.T;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,13 +39,41 @@ public class NewsFragment extends BaseFragment {
     private String title;//加载哪个
     private View view;
     private RecyclerView rv_new_list;
+    private ArrayList<NewsSummaryBean> datas;
+    private NewsListAdapter mNewsListAdapter;
+    private NewLoadingUtil mNewLoadingUtil;
 
 
     @Override
     public View initView() {
         view = View.inflate(getActivity(), R.layout.layout_fragment_news, null);
         rv_new_list = ((RecyclerView) view.findViewById(R.id.rv_new_list));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        rv_new_list.setLayoutManager(linearLayoutManager);
+        datas = new ArrayList<>();
+        mNewsListAdapter = new NewsListAdapter(getActivity(), datas);
+        rv_new_list.setAdapter(mNewsListAdapter);
+        setListener();
         return view;
+    }
+
+    private void setListener() {
+        mNewsListAdapter.setOnItemClickLitener(new NewsListAdapter.OnItemClickLitener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                T.showLong(getActivity(), "position = " + position);
+                Intent intent = new Intent(getActivity(), NewsDetailActivity.class);
+                intent.putExtra(Constant.NEWS_POST_ID, datas.get(position).getPostid());
+                intent.putExtra(Constant.NEWS_IMG_RES, datas.get(position).getImgsrc());
+                getActivity().startActivity(intent);
+            }
+
+            @Override
+            public void onItemLongClick(View view, int position) {
+
+            }
+        });
     }
 
     @Override
@@ -54,21 +89,35 @@ public class NewsFragment extends BaseFragment {
     }
 
     private void http_request(String type, String id, int startPage) {
+        mNewLoadingUtil = NewLoadingUtil.getInstance(getActivity());
         NewsServiceRequest newsServiceRequest = RetrofitNewsUtil.getInstance().create(NewsServiceRequest.class);
         newsServiceRequest.getNewsList(type, id, startPage).subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<Map<String, List<NewsSummaryBean>>>() {
             @Override
+            public void onStart() {
+                super.onStart();
+                mNewLoadingUtil.startShowLoading();
+            }
+
+            @Override
             public void onCompleted() {
-                Log.e(TAG, "onCompleted: 63" + "行 = ");
+                Log.e(TAG, "onCompleted: 103" + "行 = ");
+                mNewLoadingUtil.stopShowLoading();
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.e(TAG, "onError: 67" + "行 = " + e.getMessage());
+                Log.e(TAG, "onError: 108" + "行 = ");
+                T.showShort(getActivity(),e.getMessage());
+                mNewLoadingUtil.stopShowLoading();
             }
+
 
             @Override
             public void onNext(Map<String, List<NewsSummaryBean>> stringListMap) {
-                Log.e(TAG, "onNext: 69" + "行 = =====" + " -  " + stringListMap.get(getNewsId(title)).get(0).getTitle());
+                List<NewsSummaryBean> newsSummaryBeen = stringListMap.get(getNewsId(title));
+                datas.clear();
+                datas.addAll(newsSummaryBeen);
+                mNewsListAdapter.notifyDataSetChanged();
             }
         });
     }

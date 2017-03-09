@@ -36,23 +36,22 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <!--历史上的今天Activity-->
+        <!-- 历史上的今天Activity -->
         <activity android:name=".activity.HistoryActivity"/>
-        <!--天气舒适度Activity-->
+        <!-- 天气舒适度Activity -->
         <activity android:name=".activity.WeatherSuggestionActivity"/>
-        <!--友盟-微信-->
+        <!-- 友盟-微信 -->
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
-        <!--友盟-QQ-->
+        <!-- 友盟-QQ -->
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"
             android:noHistory="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
 
@@ -83,12 +82,15 @@
             android:configChanges="keyboardHidden|orientation"
             android:exported="false"
             android:windowSoftInputMode="adjustResize"/>
-        <!--5126ff896c738f2bfa000438-->
-        <!--//58b91567f29d985fef0014e7自己的-->
+        <!-- 5126ff896c738f2bfa000438 -->
+        <!-- //58b91567f29d985fef0014e7自己的 -->
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="58b91567f29d985fef0014e7" >
+            android:value="58b91567f29d985fef0014e7">
         </meta-data>
+
+        <activity android:name=".activity.NewsDetailActivity">
+        </activity>
     </application>
 
 </manifest>
