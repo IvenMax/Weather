@@ -1,10 +1,13 @@
 package com.iven.app.adapter;
 
 import android.content.Context;
+import android.support.annotation.AnimRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,6 +28,8 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.MyView
     private Context mContext;
     private static final String TAG = "zpy_NewsListAdapter";
     private OnItemClickLitener mOnItemClickLitener;
+    private boolean mIsShowFooter;
+    private int mLastPosition = -1;
 
     public void setOnItemClickLitener(OnItemClickLitener mOnItemClickLitener) {
         this.mOnItemClickLitener = mOnItemClickLitener;
@@ -72,11 +77,31 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.MyView
                 }
             });
         }
+        setItemAppearAnimation(holder, position, R.anim.anim_bottom_in);
+    }
+
+
+    public void showFooter() {
+        mIsShowFooter = true;
+        notifyItemInserted(getItemCount());
+    }
+
+    public void hideFooter() {
+        mIsShowFooter = false;
+        notifyItemRemoved(getItemCount());
     }
 
     @Override
     public int getItemCount() {
         return null != datas ? datas.size() : 0;
+        //        if (datas == null) {
+        //            return 0;
+        //        }
+        //        int itemSize = datas.size();
+        //        if (mIsShowFooter) {
+        //            itemSize += 1;
+        //        }
+        //        return itemSize;
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
@@ -99,5 +124,13 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.MyView
         void onItemClick(View view, int position);
 
         void onItemLongClick(View view, int position);
+    }
+
+    protected void setItemAppearAnimation(RecyclerView.ViewHolder holder, int position, @AnimRes int type) {
+        if (position > mLastPosition/* && !isFooterPosition(position)*/) {
+            Animation animation = AnimationUtils.loadAnimation(holder.itemView.getContext(), type);
+            holder.itemView.startAnimation(animation);
+            mLastPosition = position;
+        }
     }
 }

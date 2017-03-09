@@ -1,6 +1,7 @@
 package com.iven.app.fragment;
 
 import android.content.Intent;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -42,6 +43,8 @@ public class NewsFragment extends BaseFragment {
     private ArrayList<NewsSummaryBean> datas;
     private NewsListAdapter mNewsListAdapter;
     private NewLoadingUtil mNewLoadingUtil;
+    private int startPage = 0;//起始加载索引
+    private String id;
 
 
     @Override
@@ -52,6 +55,7 @@ public class NewsFragment extends BaseFragment {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rv_new_list.setLayoutManager(linearLayoutManager);
         datas = new ArrayList<>();
+        rv_new_list.setItemAnimator(new DefaultItemAnimator());
         mNewsListAdapter = new NewsListAdapter(getActivity(), datas);
         rv_new_list.setAdapter(mNewsListAdapter);
         setListener();
@@ -74,14 +78,35 @@ public class NewsFragment extends BaseFragment {
 
             }
         });
+        //滚动监听,实现下拉刷新效果
+//        rv_new_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//                RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+//                int lastVisibleItemPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
+//                int visibleItemCount = layoutManager.getChildCount();
+//                int totalItemCount = layoutManager.getItemCount();
+//
+//                if (visibleItemCount > 0 && newState == RecyclerView.SCROLL_STATE_IDLE
+//                        && lastVisibleItemPosition >= totalItemCount - 1) {
+//                    startPage+=20;
+//                    Log.e(TAG, "onScrollStateChanged: 96" + "行 = " +startPage);
+//                    http_request("list",id,startPage);
+//                    mNewsListAdapter.showFooter();
+//                    rv_new_list.scrollToPosition(mNewsListAdapter.getItemCount() - 1);
+//                }
+//            }
+//
+//        });
     }
 
     @Override
     public void initData() {
         title = getArguments().getString("title", "0");
         if (!TextUtils.isEmpty(title)) {
-            String id = getNewsId(title);
-            http_request("list", id, 0);
+             id = getNewsId(title);
+            http_request("list", id, startPage);
         } else {
             Log.e(TAG, "initData: 32" + "行 = index = " + title);
 
@@ -107,7 +132,7 @@ public class NewsFragment extends BaseFragment {
             @Override
             public void onError(Throwable e) {
                 Log.e(TAG, "onError: 108" + "行 = ");
-                T.showShort(getActivity(),e.getMessage());
+                T.showShort(getActivity(), e.getMessage());
                 mNewLoadingUtil.stopShowLoading();
             }
 
