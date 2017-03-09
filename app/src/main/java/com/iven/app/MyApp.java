@@ -39,7 +39,7 @@ public class MyApp extends Application {
             //自己申请的
             PlatformConfig.setWeixin("wxdfeb3c5558c00924", "93fda80f3007be22e6c6ddc7787ad4b6");
             PlatformConfig.setSinaWeibo("2656078997", "80fae555d83800ded489e9a137a7f6d8", "http://sns.whalecloud.com");
-//            PlatformConfig.setQQZone("100424468", "c7394704798a158208a74ab60104f0ba");
+            PlatformConfig.setQQZone("1106031574", "jBw9L1Kfj3uE5kao");
         }
     }
 
