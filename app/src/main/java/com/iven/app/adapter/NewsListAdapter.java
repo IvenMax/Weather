@@ -21,6 +21,9 @@ import java.util.ArrayList;
  * @author Iven
  * @date 2017/3/9 13:10
  * @Description
+ * todo
+ * http://blog.csdn.net/never_cxb/article/details/50759109
+ * 实现RecyclerVIew的下路加载，多布局展示
  */
 
 public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.MyViewHolder> {
