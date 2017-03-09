@@ -12,6 +12,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,7 +33,7 @@ import com.umeng.socialize.media.UMWeb;
  * 分享的面板, 一个popupWIndow
  */
 public class CustomShareBoard extends PopupWindow implements OnClickListener {
-
+    private static final String TAG = "zpy_CustomShareBoard";
     private String share_title = "title";
     private String share_content = "content";
     private String share_url = "url";
@@ -98,13 +99,11 @@ public class CustomShareBoard extends PopupWindow implements OnClickListener {
                 //performShare(SHARE_MEDIA.SINA);
                 break;
             case R.id.qq_friends:
+                Log.e(TAG, "onClick: 101" + "行 = " );
                 performShare(SHARE_MEDIA.QQ);
                 break;
             case R.id.lin_message:
                 performShare(SHARE_MEDIA.SMS);
-                break;
-            case R.id.tencent_wb:
-                performShare(SHARE_MEDIA.TENCENT);
                 break;
             case R.id.cancleShare:
                 this.dismiss();
@@ -132,7 +131,7 @@ public class CustomShareBoard extends PopupWindow implements OnClickListener {
         } else if (SHARE_MEDIA.SINA.equals(platform)) {//新浪
 
         } else {
-            shareAction.withMedia(umImage).withMedia(web);
+            shareAction.withMedia(web);
         }
         shareAction.setPlatform(platform).setCallback(umShareListener).share();
     }

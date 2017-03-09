@@ -1,5 +1,6 @@
 package com.iven.app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -33,6 +34,7 @@ import com.iven.app.view.HistoryDialogFragment;
 import com.iven.app.view.MyPopWindow;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
+import com.umeng.socialize.UMShareAPI;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -377,5 +379,10 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
         WindowManager.LayoutParams lp = getWindow().getAttributes();
         lp.alpha = bgAlpha; //0.0-1.0
         getWindow().setAttributes(lp);
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode,resultCode,data);//完成回调
     }
 }
