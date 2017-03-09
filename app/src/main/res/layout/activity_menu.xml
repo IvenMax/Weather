@@ -38,7 +38,7 @@
                 app:tabGravity="fill"
                 app:tabIndicatorColor="@color/transparent"
                 app:tabMode="fixed"
-                app:tabSelectedTextColor="#FF0000FF"
+                app:tabSelectedTextColor="@color/color_white"
                 app:tabTextAppearance="@android:style/TextAppearance.Holo.Large"
                 />
         </LinearLayout>

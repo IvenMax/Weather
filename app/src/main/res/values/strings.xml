@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">QW</string>
+    <string name="transition_photos">transition_animation_news_photos</string>
 </resources>

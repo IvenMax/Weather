@@ -4,6 +4,7 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:background="@color/funt_text"
+              android:paddingLeft="@dimen/value_20_px"
               android:orientation="horizontal"
               android:paddingBottom="@dimen/value_20_px"
               android:weightSum="4">

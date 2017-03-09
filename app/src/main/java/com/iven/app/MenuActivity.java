@@ -21,7 +21,7 @@ import com.google.gson.Gson;
 import com.iven.app.base.BaseActivity;
 import com.iven.app.bean.ActionItem;
 import com.iven.app.bean.HistoryOfTodayBean;
-import com.iven.app.fragment.NewsFragment;
+import com.iven.app.fragment.NewsMainFragment;
 import com.iven.app.fragment.ThirdFragment;
 import com.iven.app.fragment.WeatherFragment;
 import com.iven.app.utils.Api;
@@ -51,7 +51,7 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
     private FragmentManager manager;
     private int currentPage = 0;
     private WeatherFragment mWeatherFragment;
-    private NewsFragment mNewsFragment;
+    private NewsMainFragment mNewsMainFragment;
     private ThirdFragment mThirdFragment;
     private FloatingActionButton floating_button;
     private List<HistoryOfTodayBean.ResultBean> historyList;
@@ -87,10 +87,10 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
         mFragmentArrayList = new ArrayList<>();
         manager = getSupportFragmentManager();
         mWeatherFragment = new WeatherFragment();
-        mNewsFragment = new NewsFragment();
+        mNewsMainFragment = new NewsMainFragment();
         mThirdFragment = new ThirdFragment();
         mFragmentArrayList.add(mWeatherFragment);
-        mFragmentArrayList.add(mNewsFragment);
+        mFragmentArrayList.add(mNewsMainFragment);
         mFragmentArrayList.add(mThirdFragment);
         //悬浮按钮
         floating_button = (FloatingActionButton) findViewById(R.id.floating_button);

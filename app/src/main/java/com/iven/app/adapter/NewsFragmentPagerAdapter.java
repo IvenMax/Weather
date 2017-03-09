@@ -3,8 +3,9 @@ package com.iven.app.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,37 +14,41 @@ import java.util.List;
  */
 
 public class NewsFragmentPagerAdapter extends FragmentStatePagerAdapter {
-    private List<Fragment> mFragments;
-    private ArrayList<String> titles;
+    private static final String TAG = "zpy_MyPagerAdapter";
+    private List<String> titles;
+    private List<Fragment> fragments;
+    private LayoutInflater mInflater;
 
-    public NewsFragmentPagerAdapter(FragmentManager fm, List<Fragment> fragments) {
+    public NewsFragmentPagerAdapter(FragmentManager fm, List<Fragment> fragments, List<String> titles) {
         super(fm);
-        this.mFragments = fragments;
-        titles = new ArrayList<>();
-        titles.add("头条");
-        titles.add("财经");
-        titles.add("军事");
-        titles.add("体育");
-        titles.add("娱乐");
-        titles.add("笑话");
-        titles.add("游戏");
-        titles.add("时尚");
-        titles.add("旅游");
+        this.titles = titles;
+        this.fragments = fragments;
     }
+
 
     @Override
     public Fragment getItem(int position) {
-        return mFragments.get(position);
+        return fragments.get(position);
     }
 
     @Override
     public int getCount() {
-        int size = mFragments.size();
-        return null != mFragments ? size : 0;
+        return null != fragments ? fragments.size() : 0;
+    }
+
+    @Override
+    public Object instantiateItem(ViewGroup container, int position) {
+        Fragment fragment = null;
+        try {
+            fragment = (Fragment) super.instantiateItem(container, position);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return fragment;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return titles.get(position);
+        return titles.get(position % titles.size());
     }
 }

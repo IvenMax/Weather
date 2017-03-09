@@ -61,7 +61,6 @@ public class Right7DaysFragment extends Fragment {
             @Override
             public void onSuccess(SevenDaysBean sevenDaysBean, Call call, Response response) {
                 List<SevenDaysBean.HeWeather5Bean.DailyForecastBean> daily_forecast = sevenDaysBean.getHeWeather5().get(0).getDaily_forecast();
-                Log.e(TAG, "onSuccess: 108" + "行 = daily_forecast.size()" + daily_forecast.size());
                 mDailyForecastBeanArrayList.addAll(daily_forecast);
                 weather_view.setList(mDailyForecastBeanArrayList);
                 weather_view.setLineType(ZzWeatherView.LINE_TYPE_DISCOUNT);
