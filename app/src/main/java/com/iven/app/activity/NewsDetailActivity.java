@@ -18,6 +18,7 @@ import com.iven.app.retrofit.request.NewsServiceRequest;
 import com.iven.app.utils.Constant;
 import com.iven.app.utils.NewLoadingUtil;
 import com.iven.app.utils.T;
+import com.iven.app.view.URLImageGetter;
 import com.squareup.picasso.Picasso;
 
 import java.util.Map;
@@ -37,7 +38,7 @@ public class NewsDetailActivity extends AppCompatActivity {
     private String imgSrc;
     private CollapsingToolbarLayout toolbar_layout;
     private Toolbar toolbar;
-//    private URLImageGetter mUrlImageGetter;
+    private URLImageGetter mUrlImageGetter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,20 +63,6 @@ public class NewsDetailActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * 处理HTML文本显示
-     */
-    private void setBody(NewsDetailBean newsDetail, String newsBody) {
-        int imgTotal = newsDetail.getImg().size();
-        if (imgTotal >-2 && null != newsBody) {
-            //news_detail_body_tv.setMovementMethod(LinkMovementMethod.getInstance());//加这句才能让里面的超链接生效,实测经常卡机崩溃
-//            mUrlImageGetter = new URLImageGetter(news_detail_body_tv, newsBody, imgTotal);
-//            news_detail_body_tv.setText(Html.fromHtml(newsBody, mUrlImageGetter, null));
-            news_detail_body_tv.setText(Html.fromHtml(newsBody));
-        } else {
-            news_detail_body_tv.setText(Html.fromHtml(newsBody));
-        }
-    }
     private void setToolBarLayout(String newsTitle) {
         toolbar_layout.setTitle(newsTitle);
         toolbar_layout.setExpandedTitleColor(ContextCompat.getColor(this, R.color.white));
@@ -126,5 +113,22 @@ public class NewsDetailActivity extends AppCompatActivity {
 
         Picasso.with(NewsDetailActivity.this).load(imgSrc).error(R.drawable.ic_loading).into(news_detail_photo_iv);
         setToolBarLayout(newsDetailBean.getTitle());
+        setBody(newsDetailBean,newsDetailBean.getBody());
+    }
+
+    /**
+     * 处理HTML文本显示
+     * @param newsDetailBean
+     * @param newsBody
+     */
+    private void setBody(NewsDetailBean newsDetailBean, String newsBody) {
+        int imgTotal = newsDetailBean.getImg().size();
+        if (imgTotal >=2 && null !=newsBody) {
+            //              mNewsDetailBodyTv.setMovementMethod(LinkMovementMethod.getInstance());//加这句才能让里面的超链接生效,实测经常卡机崩溃
+            mUrlImageGetter = new URLImageGetter(news_detail_body_tv, newsBody, imgTotal);
+            news_detail_body_tv.setText(Html.fromHtml(newsBody, mUrlImageGetter, null));
+        } else {
+            news_detail_body_tv.setText(Html.fromHtml(newsBody));
+        }
     }
 }

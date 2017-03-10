@@ -55,4 +55,9 @@ public class RetrofitNewsUtil {
             return response;
         }
     };
+
+//    public static Observable<ResponseBody> getNewsBodyHtmlPhoto(String photoPath) {
+//        return mNewsServiceRequest.getNewsBodyHtmlPhoto(photoPath);
+//    }
+
 }
