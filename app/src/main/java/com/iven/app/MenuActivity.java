@@ -166,6 +166,7 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
                 Gson gson = new Gson();
                 HistoryOfTodayBean historyOfTodayBean = gson.fromJson(s, HistoryOfTodayBean.class);
                 List<HistoryOfTodayBean.ResultBean> result = historyOfTodayBean.getResult();
+                historyList.clear();//每次加载完成之后要先清空原集合
                 historyList.addAll(result);
             }
         });
