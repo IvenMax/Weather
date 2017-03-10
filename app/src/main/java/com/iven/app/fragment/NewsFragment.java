@@ -81,7 +81,6 @@ public class NewsFragment extends BaseFragment {
         mNewsListAdapter.setOnItemClickLitener(new NewsListAdapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position) {
-                T.showLong(getActivity(), "position = " + position);
                 Intent intent = new Intent(getActivity(), NewsDetailActivity.class);
                 intent.putExtra(Constant.NEWS_POST_ID, datas.get(position).getPostid());
                 intent.putExtra(Constant.NEWS_IMG_RES, datas.get(position).getImgsrc());

@@ -1,7 +1,12 @@
 package com.iven.app.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -30,6 +35,9 @@ public class NewsDetailActivity extends AppCompatActivity {
     private TextView news_detail_body_tv, news_detail_from_tv;
     private ImageView news_detail_photo_iv;
     private String imgSrc;
+    private CollapsingToolbarLayout toolbar_layout;
+    private Toolbar toolbar;
+//    private URLImageGetter mUrlImageGetter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +52,34 @@ public class NewsDetailActivity extends AppCompatActivity {
         news_detail_body_tv = (TextView) findViewById(R.id.news_detail_body_tv);
         news_detail_from_tv = (TextView) findViewById(R.id.news_detail_from_tv);
         news_detail_photo_iv = (ImageView) findViewById(R.id.news_detail_photo_iv);
+        toolbar_layout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+    }
+
+    /**
+     * 处理HTML文本显示
+     */
+    private void setBody(NewsDetailBean newsDetail, String newsBody) {
+        int imgTotal = newsDetail.getImg().size();
+        if (imgTotal >-2 && null != newsBody) {
+            //news_detail_body_tv.setMovementMethod(LinkMovementMethod.getInstance());//加这句才能让里面的超链接生效,实测经常卡机崩溃
+//            mUrlImageGetter = new URLImageGetter(news_detail_body_tv, newsBody, imgTotal);
+//            news_detail_body_tv.setText(Html.fromHtml(newsBody, mUrlImageGetter, null));
+            news_detail_body_tv.setText(Html.fromHtml(newsBody));
+        } else {
+            news_detail_body_tv.setText(Html.fromHtml(newsBody));
+        }
+    }
+    private void setToolBarLayout(String newsTitle) {
+        toolbar_layout.setTitle(newsTitle);
+        toolbar_layout.setExpandedTitleColor(ContextCompat.getColor(this, R.color.white));
+        toolbar_layout.setCollapsedTitleTextColor(ContextCompat.getColor(this, R.color.primary_text_white));
     }
 
     /**
@@ -86,10 +122,9 @@ public class NewsDetailActivity extends AppCompatActivity {
 
     private void setData(NewsDetailBean newsDetailBean) {
         news_detail_body_tv.setText(newsDetailBean.getBody());
-        news_detail_from_tv.setText(newsDetailBean.getSource() + newsDetailBean.getPtime().substring(5, newsDetailBean.getPtime().length() - 3));
+        news_detail_from_tv.setText(newsDetailBean.getSource() + " " + newsDetailBean.getPtime().substring(5, newsDetailBean.getPtime().length() - 3));
 
         Picasso.with(NewsDetailActivity.this).load(imgSrc).error(R.drawable.ic_loading).into(news_detail_photo_iv);
-
-
+        setToolBarLayout(newsDetailBean.getTitle());
     }
 }
