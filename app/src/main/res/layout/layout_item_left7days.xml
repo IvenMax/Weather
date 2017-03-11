@@ -116,7 +116,7 @@
             android:id="@+id/tv_leftdays_hum"
             android:layout_marginTop="@dimen/value_20_px"
             android:text="12"
-            android:textSize="12sp"
+            android:textSize="10sp"
             android:textColor="@color/color_666666"/>
     </LinearLayout>
 </LinearLayout>

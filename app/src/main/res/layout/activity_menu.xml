@@ -53,7 +53,7 @@
             android:layout_marginBottom="60dp"
             android:layout_marginRight="16dp"
             android:src="@mipmap/float_button"
-            app:backgroundTint="#048e63"
+            app:backgroundTint="@color/color_03A9F4"
             app:borderWidth="0dp"
             app:layout_anchor="@id/md_main"
             app:layout_anchorGravity="bottom|right"

@@ -60,7 +60,7 @@ public class Left7DaysAdapter extends RecyclerView.Adapter<Left7DaysAdapter.MyVi
         holder.tv_leftdays_time.setText(String.format("%s日", date.substring(date.length() - 2, date.length())));
         holder.tv_leftdays_desc_d.setText(txt_d);
         holder.tv_leftdays_desc_n.setText(txt_n);
-        holder.tv_leftdays_hum.setText(datas.get(position).getHum());
+        holder.tv_leftdays_hum.setText(datas.get(position).getHum()+"%");
         holder.tv_leftdays_wind_dir.setText(dir);
         if (RexUtils.isMatch(RexUtils.REGEX_ZH, sc)) {
             holder.tv_leftdays_wind_sc.setText(sc);
