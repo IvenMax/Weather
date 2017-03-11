@@ -26,7 +26,7 @@
     <color name="gray">#777</color>
     <color name="funt_text">#999999</color>
     <color name="color_f80d0d">#f80d0d</color>
-    <color name="color_048e63">#048e63</color>
+    <color name="color_03A9F4">#03A9F4</color>
     <color name="color_429ae6">#429ae6</color>
     <color name="transparent">@android:color/transparent</color>
     <color name="color_cc222222">#cc222222</color>
@@ -80,4 +80,5 @@
     <color name="alpha_95_black">#F2000000</color>
 
     <color name="primary_text_white">#deffffff</color>
+    <color name="color_D4D4D4">#D4D4D4</color>
 </resources>

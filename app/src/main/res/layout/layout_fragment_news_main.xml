@@ -11,10 +11,11 @@
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#048e63"
+        android:background="@color/color_03A9F4"
         app:tabGravity="fill"
         app:tabIndicatorColor="@android:color/transparent"
         app:tabMode="fixed"
+        app:tabTextColor="@color/color_D4D4D4"
         app:tabSelectedTextColor="@color/color_white"
         app:tabTextAppearance="@android:style/TextAppearance.Holo.Large"
         />

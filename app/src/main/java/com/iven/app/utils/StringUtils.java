@@ -67,7 +67,7 @@ public class StringUtils {
         } else {
 
             if (getNumber(content) < 0) {
-                textView.setTextColor(context.getResources().getColor(R.color.color_048e63));
+                textView.setTextColor(context.getResources().getColor(R.color.color_03A9F4));
                 textView.setText(content);
             } else {
                 textView.setTextColor(context.getResources().getColor(R.color.color_f80d0d));
