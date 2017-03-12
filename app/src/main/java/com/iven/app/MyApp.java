@@ -2,7 +2,9 @@ package com.iven.app;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.Vibrator;
 
+import com.iven.app.service.LocationService;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheEntity;
 import com.lzy.okgo.cache.CacheMode;
@@ -22,6 +24,8 @@ import java.util.logging.Level;
 public class MyApp extends Application {
     public static String currentCity = "北京";
     private static Context sAppContext;
+    public LocationService locationService;
+    public Vibrator mVibrator;
 
     @Override
     public void onCreate() {
@@ -29,6 +33,15 @@ public class MyApp extends Application {
         sAppContext = this;
         initOkGoHttp();
         initUMeng();
+        initBDLocation();
+    }
+
+    /***
+     * 初始化定位sdk
+     */
+    private void initBDLocation() {
+        locationService = new LocationService(getApplicationContext());
+        //        mVibrator = (Vibrator) getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
     }
 
     public static Context getAppContext() {

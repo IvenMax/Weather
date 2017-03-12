@@ -41,6 +41,11 @@ android {
             keyPassword "111111"
         }
     }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
 }
 
 dependencies {
@@ -75,4 +80,5 @@ dependencies {
     compile files('libs/umeng_social_tool.jar')
     compile files('libs/wechat-sdk-android-with-mta-1.0.2.jar')
     compile files('libs/weiboSDKCore_3.1.4.jar')
+    compile files('libs/BaiduLBS_Android.jar')
 }

@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +19,8 @@ import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.widget.PopupWindow;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
 import com.google.gson.Gson;
 import com.iven.app.base.BaseActivity;
 import com.iven.app.bean.ActionItem;
@@ -25,6 +28,7 @@ import com.iven.app.bean.HistoryOfTodayBean;
 import com.iven.app.fragment.NewsMainFragment;
 import com.iven.app.fragment.ThirdFragment;
 import com.iven.app.fragment.WeatherFragment;
+import com.iven.app.service.LocationService;
 import com.iven.app.utils.Api;
 import com.iven.app.utils.DialogUtils;
 import com.iven.app.utils.NetworkUtils;
@@ -44,6 +48,8 @@ import java.util.List;
 import okhttp3.Call;
 import okhttp3.Response;
 
+
+//27:A9:B7:28:1D:81:EE:BB:79:B2:71:58:7A:0F:2D:4C:69:31:45:01
 public class MenuActivity extends BaseActivity implements WeatherFragment.onScrollBottomListener {
     private static final String TAG = "zpy_MenuActivity";
     private NavigationView navigation_view;
@@ -59,6 +65,8 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
     private List<HistoryOfTodayBean.ResultBean> historyList;
     private MyPopWindow titlePopup;
     private List<ActionItem> items;
+    //定位
+    private LocationService locationService;
 
     /**
      * 锁屏监听
@@ -109,12 +117,27 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
         addPopWindow();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        locationService = ((MyApp) getApplication()).locationService;
+        locationService.registerListener(mListener);
+        locationService.setLocationOption(locationService.getDefaultLocationClientOption());
+    }
+
+    @Override
+    protected void onStop() {
+        locationService.unregisterListener(mListener); //注销掉监听
+        locationService.stop(); //停止定位服务
+        super.onStop();
+    }
+
     /**
      * 是否有网络
      */
     private void isNetOk() {
         boolean connected = NetworkUtils.isConnected(this);
-        if (!connected){
+        if (!connected) {
             final DialogUtils dialogUtils = new DialogUtils(this, false);
             dialogUtils.setDialogVerify(this, null, "网络已断开,前去设置", null, "OK", null, false, null, new DialogUtils.DialogClickListener() {
                 @Override
@@ -348,9 +371,9 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
                 ActionItem actionItem = actions.get(position);
                 Bundle bundle = new Bundle();
                 if (position == 0) {
-                    T.showShort(MenuActivity.this, "001");
+                    locationService.start();//开始定位
                 } else {
-                    ShareUtils shareUtils = new ShareUtils(MenuActivity.this,"天气预报","个人项目,天气预报,精准定位实时天气呦~","http://wwww.baidu.com");
+                    ShareUtils shareUtils = new ShareUtils(MenuActivity.this, "天气预报", "个人项目,天气预报,精准定位实时天气呦~", "http://wwww.baidu.com");
                     shareUtils.show();
                 }
             }
@@ -362,7 +385,7 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
      */
     private void initData() {
         items = new ArrayList<>();
-        items.add(new ActionItem(this, "001", R.mipmap.icon_info, MenuActivity.class));
+        items.add(new ActionItem(this, "定位", R.mipmap.icon_info, MenuActivity.class));
         items.add(new ActionItem(this, "分 享", R.mipmap.ic_share, MenuActivity.class));
         //给标题栏弹窗添加子类
         titlePopup.addAction(items);
@@ -381,9 +404,30 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
         lp.alpha = bgAlpha; //0.0-1.0
         getWindow().setAttributes(lp);
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        UMShareAPI.get(this).onActivityResult(requestCode,resultCode,data);//完成回调
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);//完成回调
     }
+
+    private BDLocationListener mListener = new BDLocationListener() {
+
+        @Override
+        public void onReceiveLocation(BDLocation location) {
+            // TODO Auto-generated method stub
+            if (null != location && location.getLocType() != BDLocation.TypeServerError) {
+                final String city = location.getCity();
+                final String district = location.getDistrict();
+                final String locationDescribe = location.getLocationDescribe();
+                Log.e(TAG, "run: 422" + "行 = " + city);
+                Log.e(TAG, "run: 423" + "行 = " + district);
+                Log.e(TAG, "run: 424" + "行 = " + locationDescribe.contains("successful"));
+                locationService.stop();
+            }
+        }
+
+        public void onConnectHotSpotMessage(String s, int i) {
+        }
+    };
 }
