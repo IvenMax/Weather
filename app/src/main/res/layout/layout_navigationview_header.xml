@@ -13,7 +13,7 @@
         android:layout_gravity="center"
         android:clickable="true"
         android:scaleType="centerCrop"
-        android:src="@mipmap/ic_launcher"/>
+        android:src="@mipmap/iven_logo"/>
 
     <TextView
         android:id="@+id/tv_security_name"
@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/value_20_px"
-        android:text="看得见的你"
+        android:text="see you"
         android:textColor="@color/color_1e3c72"
         android:textSize="25dp"/>
 </LinearLayout>

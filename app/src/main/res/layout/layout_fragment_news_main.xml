@@ -17,7 +17,7 @@
         app:tabMode="fixed"
         app:tabTextColor="@color/color_D4D4D4"
         app:tabSelectedTextColor="@color/color_white"
-        app:tabTextAppearance="@android:style/TextAppearance.Holo.Large"
+        app:tabTextAppearance="@android:style/TextAppearance.Holo.Medium"
         />
 
     <android.support.v4.view.ViewPager
