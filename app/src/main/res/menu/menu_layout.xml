@@ -13,11 +13,11 @@
         android:icon="@mipmap/menu03"
         android:title="设置"/>
     <item
-        android:id="@+id/file"
+        android:id="@+id/menu_04"
         android:icon="@mipmap/menu04"
-        android:title="004"/>
+        android:title="关于"/>
     <item
-        android:id="@+id/about"
+        android:id="@+id/menu_05"
         android:icon="@mipmap/menu05"
         android:title="005"/>
 </menu>

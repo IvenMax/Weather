@@ -5,6 +5,8 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
@@ -53,6 +55,7 @@ public class SplashActivity extends AppCompatActivity {
         mSplashSlogan = (TextView) findViewById(R.id.splash_slogan);
         mSplashVersionName = (TextView) findViewById(R.id.splash_version_name);
         mSplashCopyright = (TextView) findViewById(R.id.splash_copyright);
+        mSplashVersionName.setText(getVersion());
     }
 
     private void animateImage() {
@@ -77,6 +80,21 @@ public class SplashActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * 获取版本号
+     * @return V2.3
+     */
+    public String getVersion() {
+        try {
+            PackageManager manager = this.getPackageManager();
+            PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
+            String version = info.versionName;
+            return "V"+version;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "V1.0";
+        }
+    }
     /*private void finishActivity() {
         Observable.timer(1000, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<Long>() {
             @Override
