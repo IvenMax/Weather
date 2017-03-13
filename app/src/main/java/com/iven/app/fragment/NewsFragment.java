@@ -73,9 +73,9 @@ public class NewsFragment extends BaseFragment {
         swiperefreshlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Log.e(TAG, "onRefresh: 76" + "行 = " +"下拉刷新中.......");
-                startPage=0;
-                http_request("list",id,startPage);
+                Log.e(TAG, "onRefresh: 76" + "行 = " + "下拉刷新中.......");
+                startPage = 0;
+                http_request("list", id, startPage);
             }
         });
         mNewsListAdapter.setOnItemClickLitener(new NewsListAdapter.OnItemClickLitener() {
@@ -92,27 +92,25 @@ public class NewsFragment extends BaseFragment {
 
             }
         });
-        //滚动监听,实现下拉刷新效果
-        //        rv_new_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
-        //            @Override
-        //            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-        //                super.onScrollStateChanged(recyclerView, newState);
-        //                RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-        //                int lastVisibleItemPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
-        //                int visibleItemCount = layoutManager.getChildCount();
-        //                int totalItemCount = layoutManager.getItemCount();
-        //
-        //                if (visibleItemCount > 0 && newState == RecyclerView.SCROLL_STATE_IDLE
-        //                        && lastVisibleItemPosition >= totalItemCount - 1) {
-        //                    startPage+=20;
-        //                    Log.e(TAG, "onScrollStateChanged: 96" + "行 = " +startPage);
-        //                    http_request("list",id,startPage);
-        //                    mNewsListAdapter.showFooter();
-        //                    rv_new_list.scrollToPosition(mNewsListAdapter.getItemCount() - 1);
-        //                }
-        //            }
-        //
-        //        });
+        rv_new_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+                int lastVisibleItemPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
+                int visibleItemCount = layoutManager.getChildCount();
+                int totalItemCount = layoutManager.getItemCount();
+
+                if (visibleItemCount > 0 && newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItemPosition >= totalItemCount - 1) {
+                    startPage += 20;
+                    Log.e(TAG, "startPage = " + startPage);
+                    http_request("list", id, startPage);
+                    mNewsListAdapter.hideFooter();
+                    rv_new_list.scrollToPosition(mNewsListAdapter.getItemCount() - 1);
+                }
+            }
+
+        });
     }
 
     @Override
@@ -139,14 +137,12 @@ public class NewsFragment extends BaseFragment {
 
             @Override
             public void onCompleted() {
-                Log.e(TAG, "onCompleted: 103" + "行 = ");
                 mNewLoadingUtil.stopShowLoading();
                 swiperefreshlayout.setRefreshing(false);
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.e(TAG, "onError: 108" + "行 = ");
                 T.showShort(getActivity(), e.getMessage());
                 mNewLoadingUtil.stopShowLoading();
                 swiperefreshlayout.setRefreshing(false);
@@ -156,7 +152,7 @@ public class NewsFragment extends BaseFragment {
             @Override
             public void onNext(Map<String, List<NewsSummaryBean>> stringListMap) {
                 List<NewsSummaryBean> newsSummaryBeen = stringListMap.get(getNewsId(title));
-                datas.clear();
+                Log.e(TAG, "onNext: 156" + "行 = newsSummaryBeen.size() = "+newsSummaryBeen.size());
                 datas.addAll(newsSummaryBeen);
                 mNewsListAdapter.notifyDataSetChanged();
             }
