@@ -12,7 +12,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,11 +22,14 @@ import android.widget.Toast;
 
 import com.iven.app.R;
 import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
+
+import java.util.Map;
 
 /**
  * 分享的面板, 一个popupWIndow
@@ -95,11 +97,10 @@ public class CustomShareBoard extends PopupWindow implements OnClickListener {
                 performShare(SHARE_MEDIA.WEIXIN_CIRCLE);
                 break;
             case R.id.sina://新浪微博
-                T.showShort(mActivity, "待接入...");
-                //performShare(SHARE_MEDIA.SINA);
+                T.showShort(mActivity,"待续...");
+//                performShare(SHARE_MEDIA.SINA);
                 break;
             case R.id.qq_friends:
-                Log.e(TAG, "onClick: 101" + "行 = " );
                 performShare(SHARE_MEDIA.QQ);
                 break;
             case R.id.lin_message:
@@ -129,7 +130,8 @@ public class CustomShareBoard extends PopupWindow implements OnClickListener {
         if (SHARE_MEDIA.SMS.equals(platform)) {//短信分享
             shareAction.withText(share_title.concat(sinaurl));
         } else if (SHARE_MEDIA.SINA.equals(platform)) {//新浪
-
+            sinaSSO();//取消授权
+            shareAction.withMedia(web);
         } else {
             shareAction.withMedia(web);
         }
@@ -177,7 +179,12 @@ public class CustomShareBoard extends PopupWindow implements OnClickListener {
     /**
      * 授权侦听
      */
-/*    private UMAuthListener umAuthListener = new UMAuthListener() {
+    private UMAuthListener umAuthListener = new UMAuthListener() {
+        @Override
+        public void onStart(SHARE_MEDIA share_media) {
+
+        }
+
         @Override
         public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
             //            Toast.makeText(mActivity, share_media + "授权成功", Toast.LENGTH_SHORT).show();
@@ -196,7 +203,7 @@ public class CustomShareBoard extends PopupWindow implements OnClickListener {
         public void onCancel(SHARE_MEDIA share_media, int i) {
             //            Toast.makeText(mActivity, share_media + "取消授权", Toast.LENGTH_SHORT).show();
         }
-    };*/
+    };
     //发短信
     private void sendSMS() {
         Uri smsToUri = Uri.parse("smsto:");
@@ -211,7 +218,7 @@ public class CustomShareBoard extends PopupWindow implements OnClickListener {
      * sina授权
      */
     void sinaSSO() {
-        //        umShareAPI.deleteOauth(mActivity, SHARE_MEDIA.SINA, umAuthListener);
+        umShareAPI.deleteOauth(mActivity, SHARE_MEDIA.SINA, umAuthListener);
     }
 
     /**

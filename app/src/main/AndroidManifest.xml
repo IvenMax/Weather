@@ -88,6 +88,9 @@
             android:configChanges="keyboardHidden|orientation"
             android:exported="false"
             android:windowSoftInputMode="adjustResize"/>
+        <service
+            android:name="com.sina.weibo.sdk.net.DownloadService"
+            android:exported="false" />
         <!-- 5126ff896c738f2bfa000438 -->
         <!-- //58b91567f29d985fef0014e7自己的 -->
         <meta-data
