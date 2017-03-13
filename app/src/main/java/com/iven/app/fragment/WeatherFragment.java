@@ -73,6 +73,7 @@ public class WeatherFragment extends Fragment implements View.OnClickListener {
     private TabLayout tablayout_vp;
     private LinearLayout ll_hourly;
     private onScrollBottomListener mOnScrollBottomListener;
+    private TextView tv_currentcity;
 
     @Nullable
     @Override
@@ -90,6 +91,7 @@ public class WeatherFragment extends Fragment implements View.OnClickListener {
     //实例化组件
     private void init(View view) {
         tv_now_tmp = (TextView) view.findViewById(R.id.tv_now_tmp);
+        tv_currentcity = (TextView) view.findViewById(R.id.tv_currentcity);
         //设置布局管理器
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -283,6 +285,7 @@ public class WeatherFragment extends Fragment implements View.OnClickListener {
      * 显示数据
      */
     private void setData(TotalWeatherBean.HeWeather5Bean heWeather5Bean) {
+        tv_currentcity.setText(heWeather5Bean.getBasic().getCity());
         tv_now_tmp.setText(String.format("%s℃", heWeather5Bean.getNow().getTmp()));
         tv_tmp_hight.setText(String.format("%s℃", heWeather5Bean.getDaily_forecast().get(0).getTmp().getMax()));
         tv_tmp_low.setText(String.format("%s℃", heWeather5Bean.getDaily_forecast().get(0).getTmp().getMin()));
