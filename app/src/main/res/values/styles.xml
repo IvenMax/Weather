@@ -86,4 +86,9 @@
         <!--添加水波纹效果-->
         <item name="android:foreground">?android:attr/selectableItemBackground</item>
     </style>
+    <!--用于splash-->
+    <style name="FitSystemWindows">
+        <item name="android:fitsSystemWindows">true</item>
+        <item name="android:clipToPadding">false</item>
+    </style>
 </resources>

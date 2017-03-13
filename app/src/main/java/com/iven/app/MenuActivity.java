@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -79,7 +80,7 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
 
     @Override
     public void setTitle() {
-        title_title.setText("看见");
+        title_title.setText(MyApp.currentCity);
         title_left.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.mipmap.editext_tip), null, null, null);
         title_left.setOnClickListener(this);
         title_right.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.mipmap.title_right), null, null, null);
@@ -416,14 +417,37 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
         @Override
         public void onReceiveLocation(BDLocation location) {
             // TODO Auto-generated method stub
-            if (null != location && location.getLocType() != BDLocation.TypeServerError) {
+            int locType = location.getLocType();
+            Log.e(TAG, "onReceiveLocation: 420" + "行 = locType == " + locType);
+            if (null != location && (location.getLocType() == BDLocation.TypeNetWorkLocation || location.getLocType() == BDLocation.TypeGpsLocation)) {
                 final String city = location.getCity();
                 final String district = location.getDistrict();
-                final String locationDescribe = location.getLocationDescribe();
-                Log.e(TAG, "run: 422" + "行 = " + city);
-                Log.e(TAG, "run: 423" + "行 = " + district);
-                Log.e(TAG, "run: 424" + "行 = " + locationDescribe.contains("successful"));
+                int name = 0;
+                if (!TextUtils.isEmpty(district)) {
+                    if (district.contains("区")) {
+                        name = district.indexOf("区");
+                    } else if (district.contains("市")) {
+                        name = district.indexOf("市");
+                    } else if (district.contains("县")) {
+                        name = district.indexOf("县");
+                    } else {
+                        name = district.indexOf("区");
+                    }
+                    String substring = district.substring(0, name);
+                    MyApp.currentCity = substring;
+                } else {
+                    MyApp.currentCity = city.substring(0, city.indexOf("市"));
+                }
                 locationService.stop();
+                title_title.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        title_title.setText(MyApp.currentCity);
+                    }
+                });
+                T.showShort(MyApp.getAppContext(),"定位成功...");
+            } else {
+                T.showShort(MyApp.getAppContext(), "定位失败,请重试！");
             }
         }
 

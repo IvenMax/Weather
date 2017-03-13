@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">QW</string>
     <string name="transition_photos">transition_animation_news_photos</string>
+    <string name="splash_slogan">Go through the every bit of life</string>
+    <string name="splash_version">V 1.0.0</string>
+    <string name="splash_copyright">yanftch</string>
 </resources>

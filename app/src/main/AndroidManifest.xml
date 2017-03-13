@@ -31,6 +31,9 @@
         <activity
             android:name=".MenuActivity"
             android:launchMode="singleTask">
+
+        </activity>
+        <activity android:name=".activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -41,7 +44,7 @@
         <activity android:name=".activity.HistoryActivity"/>
         <!-- 天气舒适度Activity -->
         <activity android:name=".activity.WeatherSuggestionActivity"/>
-        <!--新闻详情页Activity-->
+        <!-- 新闻详情页Activity -->
         <activity android:name=".activity.NewsDetailActivity"/>
         <!-- 友盟-微信 -->
         <activity
@@ -64,7 +67,6 @@
                 <data android:scheme="tencent1106031574"/>
             </intent-filter>
         </activity>
-
         <activity
             android:name="com.tencent.connect.common.AssistActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -92,15 +94,16 @@
             android:name="UMENG_APPKEY"
             android:value="58b91567f29d985fef0014e7">
         </meta-data>
-        <!--百度地图定位-->
+        <!-- 百度地图定位 -->
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
             android:process=":remote">
         </service>
+
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="P0TR1eNMrkPWuUR7g0pEQdXh26AAkgam"/>
+            android:value="Qf66y5ws8WYPReE15Vr0OI2dD2nnEgOu"/>
     </application>
 
 </manifest>
