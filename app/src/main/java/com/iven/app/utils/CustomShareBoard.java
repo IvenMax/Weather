@@ -43,7 +43,7 @@ public class CustomShareBoard extends PopupWindow implements OnClickListener {
     private Activity mActivity;
     private final UMImage umImage;
     private final UMShareAPI umShareAPI;
-    private String sinaurl = "http://www.baidu.com";
+    private String sinaurl = "http://android.myapp.com/myapp/detail.htm?apkName=com.iven.app";
 
     /**
      * @param activity      当前Activity
