@@ -97,8 +97,8 @@ public class CustomShareBoard extends PopupWindow implements OnClickListener {
                 performShare(SHARE_MEDIA.WEIXIN_CIRCLE);
                 break;
             case R.id.sina://新浪微博
-                T.showShort(mActivity,"待续...");
-//                performShare(SHARE_MEDIA.SINA);
+//                T.showShort(mActivity,"待续...");
+                performShare(SHARE_MEDIA.SINA);
                 break;
             case R.id.qq_friends:
                 performShare(SHARE_MEDIA.QQ);

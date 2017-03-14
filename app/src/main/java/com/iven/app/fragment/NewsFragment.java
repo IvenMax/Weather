@@ -1,7 +1,11 @@
 package com.iven.app.fragment;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.iven.app.R;
 import com.iven.app.activity.NewsDetailActivity;
@@ -34,6 +39,7 @@ import rx.schedulers.Schedulers;
  * @author Iven
  * @date 2017/3/9 10:56
  * @Description 关于懒加载：http://www.jianshu.com/p/311c7ffdb85b
+ * 5.0元素共享动画：http://www.voidcn.com/blog/nbalichaoq/article/p-6356509.html
  */
 
 public class NewsFragment extends BaseFragment {
@@ -81,10 +87,24 @@ public class NewsFragment extends BaseFragment {
         mNewsListAdapter.setOnItemClickLitener(new NewsListAdapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position) {
+                ImageView imageView = (ImageView) view.findViewById(R.id.news_summary_photo_iv);
                 Intent intent = new Intent(getActivity(), NewsDetailActivity.class);
                 intent.putExtra(Constant.NEWS_POST_ID, datas.get(position).getPostid());
                 intent.putExtra(Constant.NEWS_IMG_RES, datas.get(position).getImgsrc());
-                getActivity().startActivity(intent);
+                /**
+                 * 5.0共享元素动画添加
+                 */
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    ActivityOptions options = ActivityOptions
+                            .makeSceneTransitionAnimation(getActivity(), imageView, "transition_animation_news_photos");
+                    startActivity(intent, options.toBundle());
+                } else {
+                //让新的Activity从一个小的范围扩大到全屏
+                ActivityOptionsCompat options = ActivityOptionsCompat
+                        .makeScaleUpAnimation(view, view.getWidth() / 2, view.getHeight() / 2, 0, 0);
+                ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
+//                getActivity().startActivity(intent);
+                }
             }
 
             @Override
