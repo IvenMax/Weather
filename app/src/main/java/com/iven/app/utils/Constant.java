@@ -12,4 +12,7 @@ public class Constant {
     public static final String NEWS_ID = "news_id";
     public static final String NEWS_POST_ID = "news_post_id";
     public static final String NEWS_IMG_RES = "news_img_res";
+    public static final int RESULT_CODE = 1009;
+    public static final String FLAG_COMPANY = "company";
+
 }

@@ -11,4 +11,11 @@
         layout="@layout/layout_title"
         android:background="@android:color/transparent"
         />
+
+    <ListView
+        android:id="@+id/lv_company"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:dividerHeight="@dimen/value_1_px"
+        />
 </LinearLayout>

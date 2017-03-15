@@ -8,14 +8,13 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
+        android:layout_height="match_parent"
+        android:overScrollMode="never">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -47,6 +46,7 @@
                             android:drawableLeft="@mipmap/ico_kuaididan"
                             android:drawablePadding="@dimen/value_40_px"
                             android:hint="@string/kuaididan"
+                            android:textColor="@color/color_333333"
                             android:textColorHint="@color/color_666666"
                             />
                     </android.support.design.widget.TextInputLayout>
@@ -63,8 +63,10 @@
                 </RelativeLayout>
                 <!--快递公司-->
                 <RelativeLayout
+                    android:id="@+id/rl_com"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:clickable="true"
                     android:gravity="center"
                     android:orientation="horizontal">
 
@@ -75,20 +77,23 @@
                         android:orientation="horizontal"
                         app:errorEnabled="true">
 
-                        <EditText
+                        <com.iven.app.view.ReadOnlyEditText
                             android:id="@+id/et_kuaidicompany"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:background="@null"
-                            android:drawableLeft="@mipmap/ico_kuaididan"
+                            android:drawableLeft="@mipmap/ico_company"
                             android:drawablePadding="@dimen/value_40_px"
+                            android:focusable="false"
                             android:hint="@string/kuaidicom"
+                            android:textColor="@color/color_333333"
                             android:textColorHint="@color/color_666666"
                             />
                     </android.support.design.widget.TextInputLayout>
 
                     <ImageView
+                        android:id="@+id/iv_into"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
@@ -102,7 +107,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/btn"
@@ -124,7 +130,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -138,9 +145,18 @@
                         android:text="  403331991901"
                         android:textColor="@color/black"/>
                 </LinearLayout>
+
+                <Button
+                    android:id="@+id/btn_select"
+                    style="@style/suspension_button_style_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="查询"
+                    />
             </LinearLayout>
 
-            <View style="@style/divider_all_horizontal_middle"/>
+            <View style="@style/divider_all_horizontal_middle"
+                />
 
             <LinearLayout
                 android:layout_width="match_parent"

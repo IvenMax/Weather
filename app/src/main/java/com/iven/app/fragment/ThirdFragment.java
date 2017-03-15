@@ -4,20 +4,24 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.iven.app.R;
 import com.iven.app.activity.SelectCompanyActivity;
+import com.iven.app.bean.CompanyBean;
 import com.iven.app.bean.LogisticsData;
+import com.iven.app.utils.Constant;
 import com.iven.app.utils.T;
 import com.iven.app.view.LogisticsInformationView;
+import com.iven.app.view.ReadOnlyEditText;
 
 import java.util.ArrayList;
 
@@ -35,9 +39,12 @@ public class ThirdFragment extends Fragment {
     private ArrayList<LogisticsData.DataBean> logisticsDataList;
     private static final String TAG = "zpy_ThirdFragment";
     private View view;
-    private ImageView iv_scan;
-    private EditText et_kuaididan,et_kuaidicompany;
-    private final int REQUEST_CODE=1000;
+    private ImageView iv_scan, iv_into;
+    private EditText et_kuaididan;
+    private ReadOnlyEditText et_kuaidicompany;
+    private final int REQUEST_CODE = 1023;
+    private RelativeLayout rl_com;
+    private Button btn_select;
 
     @Nullable
     @Override
@@ -53,10 +60,12 @@ public class ThirdFragment extends Fragment {
     }
 
     private void init() {
-
+        rl_com = (RelativeLayout) view.findViewById(R.id.rl_com);
         et_kuaididan = (EditText) view.findViewById(R.id.et_kuaididan);
-        et_kuaidicompany = (EditText) view.findViewById(R.id.et_kuaidicompany);
+        et_kuaidicompany = (ReadOnlyEditText) view.findViewById(R.id.et_kuaidicompany);
         iv_scan = ((ImageView) view.findViewById(R.id.iv_scan));
+        iv_into = ((ImageView) view.findViewById(R.id.iv_into));
+        btn_select = (Button) view.findViewById(R.id.btn_select);
         setListener();
 
         LogisticsInformationView logistics_InformationView = (LogisticsInformationView) view.findViewById(R.id.logistics_InformationView);
@@ -82,36 +91,61 @@ public class ThirdFragment extends Fragment {
         iv_scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                T.showShort(getActivity(),"todo...");
+                T.showShort(getActivity(), "扫描二维码");
             }
         });
-        et_kuaididan.addTextChangedListener(new TextWatcher() {
+        rl_com.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        et_kuaidicompany.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), SelectCompanyActivity.class);
-                getActivity().startActivityForResult(intent,REQUEST_CODE);
-                return true;
+                ThirdFragment.this.startActivityForResult(intent, REQUEST_CODE);
             }
         });
+        iv_into.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), SelectCompanyActivity.class);
+                ThirdFragment.this.startActivityForResult(intent, REQUEST_CODE);
+            }
+        });
+        btn_select.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (TextUtils.isEmpty(et_kuaididan.getText().toString())) {
+                    T.showLong(getActivity(), "快递单号不能为空");
+                    return;
+                }
+                if (TextUtils.isEmpty(et_kuaidicompany.getText().toString())) {
+                    T.showLong(getActivity(), "快递公司不能为空");
+                    return;
+                }
+                http(et_kuaididan.getText().toString(), et_kuaidicompany.getText().toString());
+            }
+        });
+    }
+
+    /**
+     * 网络查询物流信息
+     *
+     * @param code 快递单
+     * @param type 快递公司
+     */
+    private void http(String code, String type) {
+        T.showLong(getActivity(), "todo...");
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE && Constant.RESULT_CODE == resultCode) {
 
+            CompanyBean company = (CompanyBean) (data.getSerializableExtra(Constant.FLAG_COMPANY));
+            if (null != company) {
+                Log.e(TAG, "onActivityResult: 125" + "行 = company =" + company.toString());
+                et_kuaidicompany.setText(!TextUtils.isEmpty(company.getName()) ? company.getName() : "");
+            } else {
+                T.showLong(getActivity(), "未选择快递公司");
+            }
+        }
     }
 }
