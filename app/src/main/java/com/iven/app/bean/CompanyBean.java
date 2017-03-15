@@ -11,6 +11,16 @@ import java.io.Serializable;
 public class CompanyBean implements Serializable{
     private String name;
     private String code;
+    private String pinyinName;
+
+    public String getPinyinName() {
+        return pinyinName;
+    }
+
+    public CompanyBean setPinyinName(String pinyinName) {
+        this.pinyinName = pinyinName;
+        return this;
+    }
 
     public String getName() {
         return name;
@@ -35,6 +45,7 @@ public class CompanyBean implements Serializable{
         return "CompanyBean{" +
                 "name='" + name + '\'' +
                 ", code='" + code + '\'' +
+                ", pinyinName='" + pinyinName + '\'' +
                 '}';
     }
 }
