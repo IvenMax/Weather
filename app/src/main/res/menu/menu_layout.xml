@@ -11,7 +11,7 @@
     <item
         android:id="@+id/menu_03"
         android:icon="@mipmap/menu03"
-        android:title="设置"/>
+        android:title="快递"/>
     <item
         android:id="@+id/menu_04"
         android:icon="@mipmap/menu04"

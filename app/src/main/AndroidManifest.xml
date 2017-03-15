@@ -30,8 +30,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MenuActivity"
-            android:launchMode="singleTask">
-
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan|adjustResize">
         </activity>
         <activity android:name=".activity.SplashActivity">
             <intent-filter>
@@ -88,9 +88,10 @@
             android:configChanges="keyboardHidden|orientation"
             android:exported="false"
             android:windowSoftInputMode="adjustResize"/>
+
         <service
             android:name="com.sina.weibo.sdk.net.DownloadService"
-            android:exported="false" />
+            android:exported="false"/>
         <!-- 5126ff896c738f2bfa000438 -->
         <!-- //58b91567f29d985fef0014e7自己的 -->
         <meta-data
@@ -107,6 +108,9 @@
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="Qf66y5ws8WYPReE15Vr0OI2dD2nnEgOu"/>
+
+        <activity android:name=".activity.SelectCompanyActivity">
+        </activity>
     </application>
 
 </manifest>

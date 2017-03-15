@@ -4,4 +4,6 @@
     <string name="splash_slogan">Go through the every bit of life</string>
     <string name="splash_version">V 1.0.0</string>
     <string name="splash_copyright">yanftch</string>
+    <string name="kuaididan">请输入快递单号</string>
+    <string name="kuaidicom">请选择快递公司</string>
 </resources>

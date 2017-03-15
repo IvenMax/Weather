@@ -216,7 +216,7 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
         mTabLayout.removeAllTabs();
         mTabLayout.addTab(mTabLayout.newTab().setText("天气"));
         mTabLayout.addTab(mTabLayout.newTab().setText("新闻"));
-        mTabLayout.addTab(mTabLayout.newTab().setText("设置"));
+        mTabLayout.addTab(mTabLayout.newTab().setText("快递"));
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

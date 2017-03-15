@@ -81,4 +81,6 @@
 
     <color name="primary_text_white">#deffffff</color>
     <color name="color_D4D4D4">#D4D4D4</color>
+    <color name="color_cccccc">#cccccc</color>
+    <color name="color_60cd89">#60cd89</color>
 </resources>
