@@ -20,6 +20,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * @author WYH_Healer
+ * @email 3425934925@qq.com
+ * Created by xz on 2017/2/20.
+ * Role:自定义的物流信息界面
+ */
 public class LogisticsInformationView extends View {
     private static final String TAG = "zpy_LogisticsInformationView";
     Context context;
@@ -102,11 +108,11 @@ public class LogisticsInformationView extends View {
         paint.setColor(getResources().getColor(R.color.color_cccccc));
 
         mPaintPhone = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaintPhone.setColor(getResources().getColor(R.color.color_3F51B5));
+        mPaintPhone.setColor(getResources().getColor(R.color.colorPrimaryDark));
         mPaintPhone.setTextSize(35.0F);
 
         textPaintPhone = new TextPaint();
-        textPaintPhone.setColor(getResources().getColor(R.color.color_3F51B5));
+        textPaintPhone.setColor(getResources().getColor(R.color.colorPrimaryDark));
         textPaintPhone.setTextSize(35.0F);
         textPaintPhone.setAntiAlias(true);
 
@@ -126,7 +132,7 @@ public class LogisticsInformationView extends View {
      */
     public void setLogisticsDataList(List<LogisticsData.DataBean> logisticsDataList) {
         this.logisticsDataList = logisticsDataList;
-        Log.e(TAG, "setLogisticsDataList: 129" + "行 = "+logisticsDataList.size());
+
         heightList = new ArrayList<>();
         TextPaint textPaint = new TextPaint();
         textPaint.setTextSize(35.0F);
@@ -167,7 +173,7 @@ public class LogisticsInformationView extends View {
                 textPaint.setTextSize(35.0F);
                 textPaint.setAntiAlias(true);
                 //自动换行的textview超出边界dwidth*0.8就换行
-                //                StaticLayout layout = new StaticLayout(((LogisticsData.DataBean)data.get(i)).getContext()+"", textPaint, (int) (windowWidth * 0.8), Layout.Alignment.ALIGN_NORMAL, 1.0F, 0.0F, true);
+                //                StaticLayout layout = new StaticLayout(((LogisticsData)data.get(i)).getContext()+"", textPaint, (int) (windowWidth * 0.8), Layout.Alignment.ALIGN_NORMAL, 1.0F, 0.0F, true);
                 //                LogUtils.i("获取最后一行占的宽度"+layout.getLineWidth(layout.getLineCount()-1));
 
 
@@ -183,7 +189,7 @@ public class LogisticsInformationView extends View {
                  * 分割带电话的数据
                  * */
                 String[] splitData = splitString(((LogisticsData.DataBean) data.get(i)).getContext() + "");
-                if (splitData != null && splitData.length >1) {
+                if (splitData != null) {
                     //说明有电话号码
                     splitPhoneData(splitData, canvas, textPaint, 0, true);
                 } else {
@@ -216,7 +222,7 @@ public class LogisticsInformationView extends View {
                  * 分割带电话的数据
                  * */
                 String[] splitData = splitString(((LogisticsData.DataBean) data.get(i)).getContext() + "");
-                if (splitData != null && splitData.length >1) {
+                if (splitData != null) {
                     //说明有电话号码
                     splitPhoneData(splitData, canvas, textPaint, heightData, false);
                 } else {
@@ -301,9 +307,6 @@ public class LogisticsInformationView extends View {
     public void splitPhoneData(String[] splitData, Canvas canvas, TextPaint textPaint, int heightData, boolean isTop) {
         StaticLayout layoutPhone = new StaticLayout(phoneNumber, textPaintPhone, (int) (windowWidth * 0.8), Layout.Alignment.ALIGN_NORMAL, 1.0F, 0.0F, true);
 
-        //获取最后一段的宽度
-        StaticLayout layoutLast = new StaticLayout(splitData[1], textPaint, (int) (windowWidth * 0.8), Layout.Alignment.ALIGN_NORMAL, 1.0F, 0.0F, true);
-
         //1.首先绘制电话前段的数据
         StaticLayout layout = new StaticLayout(splitData[0], textPaint, (int) (windowWidth * 0.8), Layout.Alignment.ALIGN_NORMAL, 1.0F, 0.0F, true);
         int layoutFirst = layout.getHeight();
@@ -312,70 +315,97 @@ public class LogisticsInformationView extends View {
         layout.draw(canvas);
         canvas.restore();//重置
 
-        //2.判断是剩下的宽度是否能够容纳手机号码宽度
-        if ((int) (windowWidth * 0.8) - layout.getLineWidth(layout.getLineCount() - 1) > phoneNumberWidth) {
-            //3.1.如果是可以容纳的情况
-            //记录Map坐标轴数据
-            phoneYNumber.put((float) (heightData + (isTop ? -10 : 10) + layoutPhone.getHeight()), phoneNumber);
-            stopYX.put((float) (heightData + (isTop ? -10 : 10) + layoutPhone.getHeight()), left * 2 + radius * 2 + 10 + (layout.getLineWidth(layout.getLineCount() - 1)) + phoneNumberWidth);
-            stopYList.add((float) (heightData + (isTop ? -10 : 10) + layoutPhone.getHeight()));
-            mPaintPhone.setColor(getResources().getColor(R.color.color_3F51B5));
-            canvas.drawText(phoneNumber, left * 2 + radius * 2 + 10 + (layout.getLineWidth(layout.getLineCount() - 1)), layoutFirst + heightData + (isTop ? -10 : 10), mPaintPhone);
-            if ((int) (windowWidth * 0.8) - layout.getLineWidth(layout.getLineCount() - 1) - phoneNumberWidth > layoutLast.getLineWidth(0)) {
-                //4.1.如果一行就可以绘制完成
-                mPaintPhone.setColor(getResources().getColor(isTop ? R.color.color_60cd89 : R.color.color_cccccc));
-                canvas.drawText(splitData[1], left * 2 + radius * 2 + 10 + (layout.getLineWidth(layout.getLineCount() - 1) + phoneNumberWidth), layoutFirst + heightData + (isTop ? -10 : 10), mPaintPhone);
+        //判断截取端是多少
+        if (splitData.length <= 1) {
+            //没有后续
+            //2.判断是剩下的宽度是否能够容纳手机号码宽度
+            if ((int) (windowWidth * 0.8) - layout.getLineWidth(layout.getLineCount() - 1) > phoneNumberWidth) {
+                phoneYNumber.put((float) (heightData + (isTop ? -10 : 10) + layoutPhone.getHeight()), phoneNumber);
+                stopYX.put((float) (heightData + (isTop ? -10 : 10) + layoutPhone.getHeight()), left * 2 + radius * 2 + 10 + (layout.getLineWidth(layout.getLineCount() - 1)) + phoneNumberWidth);
+                stopYList.add((float) (heightData + (isTop ? -10 : 10) + layoutPhone.getHeight()));
+                mPaintPhone.setColor(getResources().getColor(R.color.colorPrimaryDark));
+                canvas.drawText(phoneNumber, left * 2 + radius * 2 + 10 + (layout.getLineWidth(layout.getLineCount() - 1)), layoutFirst + heightData + (isTop ? -10 : 10), mPaintPhone);
             } else {
-                //4.2.一行不可以完成的情况下继续分割成两份，一份是drawText拼接到最后，一份是StaticLayout另起一行绘制
-                double percentLast = (((int) (windowWidth * 0.8) - layout.getLineWidth(layout.getLineCount() - 1) - phoneNumberWidth));
-                //获取字符能显示的最大Length
-                double maxLength = percentLast / 35.0F;//这里的35.0是一个中文字体的大小
-                String lastStringPre = splitData[1].substring(0, (int) maxLength + 1);//获取最大数据的长度的字符串拼接
-                String lastStringLas = splitData[1].substring((int) maxLength + 1);
-                mPaintPhone.setColor(getResources().getColor(isTop ? R.color.color_60cd89 : R.color.color_cccccc));
-                canvas.drawText(lastStringPre, left * 2 + radius * 2 + 10 + (layout.getLineWidth(layout.getLineCount() - 1) + phoneNumberWidth), layoutFirst + heightData + (isTop ? -10 : 10), mPaintPhone);
-
-                //另起一行写剩余的数据
-
-                StaticLayout layoutlastString = new StaticLayout(lastStringLas, textPaint, (int) (windowWidth * 0.8), Layout.Alignment.ALIGN_NORMAL, 1.0F, 0.0F, true);
+                phoneYNumber.put((float) (layoutFirst + heightData + (isTop ? 0 : top) + layoutPhone.getHeight()), phoneNumber);
+                stopYX.put((float) (layoutFirst + heightData + (isTop ? 0 : top) + layoutPhone.getHeight()), left * 2 + radius * 2 + 10 + phoneNumberWidth);
+                stopYList.add((float) (layoutFirst + heightData + (isTop ? 0 : top) + layoutPhone.getHeight()));
+                //5.1获取之前的高度
                 canvas.save();//很重要，不然会样式出错
                 canvas.translate(left * 2 + radius * 2 + 10, layoutFirst + heightData + (isTop ? 0 : top));
-                layoutlastString.draw(canvas);
+                layoutPhone.draw(canvas);
                 canvas.restore();//重置
             }
         } else {
-            //3.2.如果是不可以容纳的情况,现在默认电话号码不可以容纳的情况就另起一行使用StaticLayout绘制
-            phoneYNumber.put((float) (layoutFirst + heightData + (isTop ? 0 : top) + layoutPhone.getHeight()), phoneNumber);
-            stopYX.put((float) (layoutFirst + heightData + (isTop ? 0 : top) + layoutPhone.getHeight()), left * 2 + radius * 2 + 10 + phoneNumberWidth);
-            stopYList.add((float) (layoutFirst + heightData + (isTop ? 0 : top) + layoutPhone.getHeight()));
-            //5.1获取之前的高度
-            canvas.save();//很重要，不然会样式出错
-            canvas.translate(left * 2 + radius * 2 + 10, layoutFirst + heightData + (isTop ? 0 : top));
-            layoutPhone.draw(canvas);
-            canvas.restore();//重置
-            if ((int) (windowWidth * 0.8) - phoneNumberWidth > layoutLast.getLineWidth(0)) {
-                //4.1.如果一行就可以绘制完成
-                mPaintPhone.setColor(getResources().getColor(isTop ? R.color.color_60cd89 : R.color.color_cccccc));
-                canvas.drawText(splitData[1], left * 2 + radius * 2 + 10 + phoneNumberWidth, layoutPhone.getHeight() + layoutFirst + heightData + (isTop ? -10 : 10), mPaintPhone);
+            //有后续
+            //获取最后一段的宽度
+            StaticLayout layoutLast = new StaticLayout(splitData[1], textPaint, (int) (windowWidth * 0.8), Layout.Alignment.ALIGN_NORMAL, 1.0F, 0.0F, true);
+
+            //2.判断是剩下的宽度是否能够容纳手机号码宽度
+            if ((int) (windowWidth * 0.8) - layout.getLineWidth(layout.getLineCount() - 1) > phoneNumberWidth) {
+                //3.1.如果是可以容纳的情况
+                //记录Map坐标轴数据
+                phoneYNumber.put((float) (heightData + (isTop ? -10 : 10) + layoutPhone.getHeight()), phoneNumber);
+                stopYX.put((float) (heightData + (isTop ? -10 : 10) + layoutPhone.getHeight()), left * 2 + radius * 2 + 10 + (layout.getLineWidth(layout.getLineCount() - 1)) + phoneNumberWidth);
+                stopYList.add((float) (heightData + (isTop ? -10 : 10) + layoutPhone.getHeight()));
+                mPaintPhone.setColor(getResources().getColor(R.color.colorPrimaryDark));
+                canvas.drawText(phoneNumber, left * 2 + radius * 2 + 10 + (layout.getLineWidth(layout.getLineCount() - 1)), layoutFirst + heightData + (isTop ? -10 : 10), mPaintPhone);
+                if ((int) (windowWidth * 0.8) - layout.getLineWidth(layout.getLineCount() - 1) - phoneNumberWidth > layoutLast.getLineWidth(0)) {
+                    //4.1.如果一行就可以绘制完成
+                    mPaintPhone.setColor(getResources().getColor(isTop ? R.color.color_60cd89 : R.color.color_cccccc));
+                    canvas.drawText(splitData[1], left * 2 + radius * 2 + 10 + (layout.getLineWidth(layout.getLineCount() - 1) + phoneNumberWidth), layoutFirst + heightData + (isTop ? -10 : 10), mPaintPhone);
+                } else {
+                    //4.2.一行不可以完成的情况下继续分割成两份，一份是drawText拼接到最后，一份是StaticLayout另起一行绘制
+                    double percentLast = (((int) (windowWidth * 0.8) - layout.getLineWidth(layout.getLineCount() - 1) - phoneNumberWidth));
+                    //获取字符能显示的最大Length
+                    double maxLength = percentLast / 35.0F;//这里的35.0是一个中文字体的大小
+                    String lastStringPre = splitData[1].substring(0, (int) maxLength + 1);//获取最大数据的长度的字符串拼接
+                    String lastStringLas = splitData[1].substring((int) maxLength + 1);
+                    mPaintPhone.setColor(getResources().getColor(isTop ? R.color.color_60cd89 : R.color.color_cccccc));
+                    canvas.drawText(lastStringPre, left * 2 + radius * 2 + 10 + (layout.getLineWidth(layout.getLineCount() - 1) + phoneNumberWidth), layoutFirst + heightData + (isTop ? -10 : 10), mPaintPhone);
+
+                    //另起一行写剩余的数据
+
+                    StaticLayout layoutlastString = new StaticLayout(lastStringLas, textPaint, (int) (windowWidth * 0.8), Layout.Alignment.ALIGN_NORMAL, 1.0F, 0.0F, true);
+                    canvas.save();//很重要，不然会样式出错
+                    canvas.translate(left * 2 + radius * 2 + 10, layoutFirst + heightData + (isTop ? 0 : top));
+                    layoutlastString.draw(canvas);
+                    canvas.restore();//重置
+                }
             } else {
-                //4.2.一行不可以完成的情况下继续分割成两份，一份是drawText拼接到最后，一份是StaticLayout另起一行绘制
-                double percentLast = (int) (windowWidth * 0.8) - phoneNumberWidth;
-                //获取字符能显示的最大Length
-                double maxLength = percentLast / 35.0F;//这里的35.0是一个中文字体的大小
-
-                String lastStringPre = splitData[1].substring(0, (int) maxLength + 1);//获取最大数据的长度的字符串拼接
-                String lastStringLas = splitData[1].substring((int) maxLength + 1);
-                mPaintPhone.setColor(getResources().getColor(isTop ? R.color.color_60cd89 : R.color.color_cccccc));
-                canvas.drawText(lastStringPre, left * 2 + radius * 2 + 10 + phoneNumberWidth, layoutPhone.getHeight() + layoutFirst + heightData + (isTop ? -10 : 10), mPaintPhone);
-
-                //另起一行写剩余的数据
-
-                StaticLayout layoutlastString = new StaticLayout(lastStringLas, textPaint, (int) (windowWidth * 0.8), Layout.Alignment.ALIGN_NORMAL, 1.0F, 0.0F, true);
+                //3.2.如果是不可以容纳的情况,现在默认电话号码不可以容纳的情况就另起一行使用StaticLayout绘制
+                phoneYNumber.put((float) (layoutFirst + heightData + (isTop ? 0 : top) + layoutPhone.getHeight()), phoneNumber);
+                stopYX.put((float) (layoutFirst + heightData + (isTop ? 0 : top) + layoutPhone.getHeight()), left * 2 + radius * 2 + 10 + phoneNumberWidth);
+                stopYList.add((float) (layoutFirst + heightData + (isTop ? 0 : top) + layoutPhone.getHeight()));
+                //5.1获取之前的高度
                 canvas.save();//很重要，不然会样式出错
-                canvas.translate(left * 2 + radius * 2 + 10, layoutPhone.getHeight() + layoutFirst + heightData + (isTop ? 0 : top));
-                layoutlastString.draw(canvas);
+                canvas.translate(left * 2 + radius * 2 + 10, layoutFirst + heightData + (isTop ? 0 : top));
+                layoutPhone.draw(canvas);
                 canvas.restore();//重置
+                if ((int) (windowWidth * 0.8) - phoneNumberWidth > layoutLast.getLineWidth(0)) {
+                    //4.1.如果一行就可以绘制完成
+                    mPaintPhone.setColor(getResources().getColor(isTop ? R.color.color_60cd89 : R.color.color_cccccc));
+                    canvas.drawText(splitData[1], left * 2 + radius * 2 + 10 + phoneNumberWidth, layoutPhone.getHeight() + layoutFirst + heightData + (isTop ? -10 : 10), mPaintPhone);
+                } else {
+                    //4.2.一行不可以完成的情况下继续分割成两份，一份是drawText拼接到最后，一份是StaticLayout另起一行绘制
+                    double percentLast = (int) (windowWidth * 0.8) - phoneNumberWidth;
+                    //获取字符能显示的最大Length
+                    double maxLength = percentLast / 35.0F;//这里的35.0是一个中文字体的大小
+
+                    String lastStringPre = splitData[1].substring(0, (int) maxLength + 1);//获取最大数据的长度的字符串拼接
+                    String lastStringLas = splitData[1].substring((int) maxLength + 1);
+                    mPaintPhone.setColor(getResources().getColor(isTop ? R.color.color_60cd89 : R.color.color_cccccc));
+                    canvas.drawText(lastStringPre, left * 2 + radius * 2 + 10 + phoneNumberWidth, layoutPhone.getHeight() + layoutFirst + heightData + (isTop ? -10 : 10), mPaintPhone);
+
+                    //另起一行写剩余的数据
+
+                    StaticLayout layoutlastString = new StaticLayout(lastStringLas, textPaint, (int) (windowWidth * 0.8), Layout.Alignment.ALIGN_NORMAL, 1.0F, 0.0F, true);
+                    canvas.save();//很重要，不然会样式出错
+                    canvas.translate(left * 2 + radius * 2 + 10, layoutPhone.getHeight() + layoutFirst + heightData + (isTop ? 0 : top));
+                    layoutlastString.draw(canvas);
+                    canvas.restore();//重置
+                }
             }
+
         }
     }
 
