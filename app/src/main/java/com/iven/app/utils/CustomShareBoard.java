@@ -121,7 +121,7 @@ public class CustomShareBoard extends PopupWindow implements OnClickListener {
         }
         ShareAction shareAction = new ShareAction(mActivity);
         //设置分享的链接
-        UMImage image = new UMImage(mActivity, R.mipmap.ic_share);//资源文件
+        UMImage image = new UMImage(mActivity, R.mipmap.iven_logo_share);//资源文件
         //注意在新浪平台，缩略图属于必传参数，否则会报错
         UMWeb web = new UMWeb(share_url);//分享链接
         web.setTitle(share_title);//设置分享时候的显示标题

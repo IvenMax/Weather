@@ -374,7 +374,7 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
                 if (position == 0) {
                     locationService.start();//开始定位
                 } else {
-                    ShareUtils shareUtils = new ShareUtils(MenuActivity.this, "天气预报", "个人项目,天气预报,精准定位实时天气呦~", "http://wwww.baidu.com");
+                    ShareUtils shareUtils = new ShareUtils(MenuActivity.this, "-QW-", "生活助手~查天气、看新闻or查快递~样样精通", "http://a.app.qq.com/o/simple.jsp?pkgname=com.iven.app");
                     shareUtils.show();
                 }
             }
