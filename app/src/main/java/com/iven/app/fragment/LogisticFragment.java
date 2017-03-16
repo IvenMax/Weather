@@ -115,6 +115,7 @@ public class LogisticFragment extends Fragment {
                     T.showLong(getActivity(), "快递公司不能为空");
                     return;
                 }
+                logistics_InformationView.setVisibility(View.GONE);
                 http(et_kuaididan.getText().toString(), kd_company_code);
             }
         });
