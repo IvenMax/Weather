@@ -126,7 +126,7 @@ public class LogisticsInformationView extends View {
      */
     public void setLogisticsDataList(List<LogisticsData.DataBean> logisticsDataList) {
         this.logisticsDataList = logisticsDataList;
-
+        Log.e(TAG, "setLogisticsDataList: 129" + "行 = "+logisticsDataList.size());
         heightList = new ArrayList<>();
         TextPaint textPaint = new TextPaint();
         textPaint.setTextSize(35.0F);
@@ -183,7 +183,7 @@ public class LogisticsInformationView extends View {
                  * 分割带电话的数据
                  * */
                 String[] splitData = splitString(((LogisticsData.DataBean) data.get(i)).getContext() + "");
-                if (splitData != null) {
+                if (splitData != null && splitData.length >1) {
                     //说明有电话号码
                     splitPhoneData(splitData, canvas, textPaint, 0, true);
                 } else {
@@ -216,7 +216,7 @@ public class LogisticsInformationView extends View {
                  * 分割带电话的数据
                  * */
                 String[] splitData = splitString(((LogisticsData.DataBean) data.get(i)).getContext() + "");
-                if (splitData != null) {
+                if (splitData != null && splitData.length >1) {
                     //说明有电话号码
                     splitPhoneData(splitData, canvas, textPaint, heightData, false);
                 } else {
@@ -257,7 +257,6 @@ public class LogisticsInformationView extends View {
         if (initData != null) {
             //说明有电话号码，进行数据分割,默认每一段content中最多包含一个手机号码
             String[] splitData = data.split(initData);
-            Log.i(TAG, splitData[0] + "==" + splitData[1]);
             return splitData;
         }
         //没有电话号码就返回null

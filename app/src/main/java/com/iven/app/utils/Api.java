@@ -16,6 +16,8 @@ public class Api {
      * 历史上的今天--聚合数据
      */
     public static final String HISTORY_OF_TODAY="http://api.juheapi.com/japi/toh?key=341db9ae817fafbeedb1d501301c0aff&v=1.0&";
-
-
+    /**
+     * 快递100
+     */
+public static String KUDI100="https://www.kuaidi100.com/query?type=+"+"&postid=70069047090116&id=1&valicode=&temp=";
 }

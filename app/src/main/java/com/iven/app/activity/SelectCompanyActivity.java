@@ -73,33 +73,20 @@ public class SelectCompanyActivity extends BaseActivity {
         SelectCompanyActivity.this.finish();
     }
 
-    /*    @Override
-        public boolean onKeyDown(int keyCode, KeyEvent event) {
-            if (keyCode == KeyEvent.KEYCODE_BACK) {
-                Intent intent = new Intent();
-                intent.putExtra(Constant.FLAG_COMPANY, "shunfeng");
-                setResult(Constant.RESULT_CODE, intent);
-                finish();
-            }
-            return super.onKeyDown(keyCode, event);
-        }*/
     private void addCompany() {
         companyes.add(new CompanyBean().setName("百世快递").setCode("baishiwuliu"));
         companyes.add(new CompanyBean().setName("天天快递").setCode("tiantian"));
         companyes.add(new CompanyBean().setName("宅急送").setCode("zhaijisong"));
         companyes.add(new CompanyBean().setName("韵达快递").setCode("yunda"));
         companyes.add(new CompanyBean().setName("中通").setCode("zhongtong"));
-        companyes.add(new CompanyBean().setName("百世快递").setCode("baishiwuliu"));
-        companyes.add(new CompanyBean().setName("百世快递").setCode("baishiwuliu"));
-        companyes.add(new CompanyBean().setName("百世快递").setCode("baishiwuliu"));
-        companyes.add(new CompanyBean().setName("百世快递").setCode("baishiwuliu"));
-        companyes.add(new CompanyBean().setName("百世快递").setCode("baishiwuliu"));
-        companyes.add(new CompanyBean().setName("百世快递").setCode("baishiwuliu"));
-        companyes.add(new CompanyBean().setName("百世快递").setCode("baishiwuliu"));
-        companyes.add(new CompanyBean().setName("百世快递").setCode("baishiwuliu"));
-        companyes.add(new CompanyBean().setName("百世快递").setCode("baishiwuliu"));
-        companyes.add(new CompanyBean().setName("百世快递").setCode("baishiwuliu"));
-        companyes.add(new CompanyBean().setName("百世快递").setCode("baishiwuliu"));
-        companyes.add(new CompanyBean().setName("百世快递").setCode("baishiwuliu"));
+        companyes.add(new CompanyBean().setName("圆通快递").setCode("yuantong"));
+        companyes.add(new CompanyBean().setName("申通快递").setCode("shentong"));
+        companyes.add(new CompanyBean().setName("顺丰快递").setCode("shunfeng"));
+        companyes.add(new CompanyBean().setName("EMS").setCode("EMS"));
+        companyes.add(new CompanyBean().setName("邮政国内").setCode("youzhengguonei"));
+        companyes.add(new CompanyBean().setName("德邦").setCode("debangwuliu"));
+        companyes.add(new CompanyBean().setName("凡客如风达").setCode("rufengda"));
+        companyes.add(new CompanyBean().setName("快捷快递").setCode("kuaijiesudi"));
+        companyes.add(new CompanyBean().setName("全峰快递").setCode("quanfengkuaidi"));
     }
 }

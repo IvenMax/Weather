@@ -18,12 +18,20 @@ import com.iven.app.R;
 import com.iven.app.activity.SelectCompanyActivity;
 import com.iven.app.bean.CompanyBean;
 import com.iven.app.bean.LogisticsData;
+import com.iven.app.okgo.JsonCallback;
 import com.iven.app.utils.Constant;
+import com.iven.app.utils.NewLoadingUtil;
 import com.iven.app.utils.T;
 import com.iven.app.view.LogisticsInformationView;
 import com.iven.app.view.ReadOnlyEditText;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.request.BaseRequest;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Response;
 
 
 /**
@@ -35,7 +43,7 @@ import java.util.ArrayList;
  * @Description
  */
 
-public class ThirdFragment extends Fragment {
+public class LogisticFragment extends Fragment {
     private ArrayList<LogisticsData.DataBean> logisticsDataList;
     private static final String TAG = "zpy_ThirdFragment";
     private View view;
@@ -45,6 +53,9 @@ public class ThirdFragment extends Fragment {
     private final int REQUEST_CODE = 1023;
     private RelativeLayout rl_com;
     private Button btn_select;
+    private String kd_company_code, kd_danhao;
+    private LogisticsInformationView logistics_InformationView;
+    private NewLoadingUtil mNewLoadingUtil;
 
     @Nullable
     @Override
@@ -68,23 +79,8 @@ public class ThirdFragment extends Fragment {
         btn_select = (Button) view.findViewById(R.id.btn_select);
         setListener();
 
-        LogisticsInformationView logistics_InformationView = (LogisticsInformationView) view.findViewById(R.id.logistics_InformationView);
+        logistics_InformationView = (LogisticsInformationView) view.findViewById(R.id.logistics_InformationView);
         logisticsDataList = new ArrayList<>();
-        logisticsDataList.add(new LogisticsData.DataBean().setTime("2017-1-20 07:23:06").setContext("[杭州市]浙江杭州江干公司派件员：吕敬桥  15555555551  正在为您派件正在为您派件正在为您派件正在为您派件正在为您派件正在为您派件正在为您派件"));
-        logisticsDataList.add(new LogisticsData.DataBean().setTime("2017-1-19 23:11:37").setContext("[杭州市]浙江杭州江干区新杭派公司派件员：吕敬桥  15555555552  正在为您派件"));
-        logisticsDataList.add(new LogisticsData.DataBean().setTime("2017-1-19 23:08:06").setContext("[杭州市]浙江派件员：吕敬桥  15555555553  正在为您派件"));
-        logisticsDataList.add(new LogisticsData.DataBean().setTime("2017-1-19 23:08:06").setContext("[杭州市]员：吕敬桥  15555555554  正在为您派件"));
-        logisticsDataList.add(new LogisticsData.DataBean().setTime("2017-1-20 11:23:07").setContext("[杭州市]浙江杭州江干区新杭派公司进行签收扫描，快件已被  已签收  签收，感谢使用韵达快递，期待再次为您服务"));
-        logisticsDataList.add(new LogisticsData.DataBean().setTime("2017-1-19 15:52:43").setContext("[泰州市]韵达快递  江苏靖江市公司收件员  已揽件"));
-        logisticsDataList.add(new LogisticsData.DataBean().setTime("2017-1-19 12:39:15").setContext("包裹正等待揽件"));
-        logisticsDataList.add(new LogisticsData.DataBean().setTime("2016-6-28 15:13:02").setContext("快件在【相城中转仓】装车,正发往【无锡分拨中心】已签收,签收人是【王漾】,签收网点是【忻州原平】"));
-        logisticsDataList.add(new LogisticsData.DataBean().setTime("2017-1-20 11:23:07").setContext("[杭州市]浙江杭州江干区新杭派公司进行签收扫描，快件已被  已签收  签收，感谢使用韵达快递，期待再次为您服务"));
-        logisticsDataList.add(new LogisticsData.DataBean().setTime("2017-1-20 06:48:37").setContext("到达目的地网点浙江杭州江干区新杭派，快件很快进行派送"));
-        logisticsDataList.add(new LogisticsData.DataBean().setTime("2017-1-19 23:11:37").setContext("[苏州市]江苏苏州分拨中心  已发出"));
-        logisticsDataList.add(new LogisticsData.DataBean().setTime("2017-1-19 23:08:06").setContext("[苏州市]快件已到达  江苏苏州分拨中心"));
-        logisticsDataList.add(new LogisticsData.DataBean().setTime("2017-1-19 15:52:43").setContext("[泰州市]韵达快递  江苏靖江市公司收件员  已揽件"));
-        logisticsDataList.add(new LogisticsData.DataBean().setTime("2017-1-19 12:39:15").setContext("包裹正等待揽件"));
-        //        logistics_InformationView.setLogisticsDataList(logisticsDataList);
     }
 
     private void setListener() {
@@ -98,14 +94,14 @@ public class ThirdFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), SelectCompanyActivity.class);
-                ThirdFragment.this.startActivityForResult(intent, REQUEST_CODE);
+                LogisticFragment.this.startActivityForResult(intent, REQUEST_CODE);
             }
         });
         iv_into.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), SelectCompanyActivity.class);
-                ThirdFragment.this.startActivityForResult(intent, REQUEST_CODE);
+                LogisticFragment.this.startActivityForResult(intent, REQUEST_CODE);
             }
         });
         btn_select.setOnClickListener(new View.OnClickListener() {
@@ -119,7 +115,7 @@ public class ThirdFragment extends Fragment {
                     T.showLong(getActivity(), "快递公司不能为空");
                     return;
                 }
-                http(et_kuaididan.getText().toString(), et_kuaidicompany.getText().toString());
+                http(et_kuaididan.getText().toString(), kd_company_code);
             }
         });
     }
@@ -131,7 +127,37 @@ public class ThirdFragment extends Fragment {
      * @param type 快递公司
      */
     private void http(String code, String type) {
-        T.showLong(getActivity(), "todo...");
+        mNewLoadingUtil = NewLoadingUtil.getInstance(getActivity());
+        String url = "https://www.kuaidi100.com/query?type=" + type + "&postid=" + code + "&id=1&valicode=&temp=";
+        kd_danhao = et_kuaididan.getText().toString();
+        OkGo.get(url).execute(new JsonCallback<LogisticsData>() {
+            @Override
+            public void onSuccess(LogisticsData logisticsData, Call call, Response response) {
+                logistics_InformationView.setVisibility(View.VISIBLE);
+                List<LogisticsData.DataBean> data = logisticsData.getData();
+                logisticsDataList.clear();
+                logisticsDataList.addAll(data);
+                logistics_InformationView.setLogisticsDataList(logisticsDataList);
+            }
+
+            @Override
+            public void onError(Call call, Response response, Exception e) {
+                super.onError(call, response, e);
+                T.showLong(getActivity(),e.getMessage());
+            }
+
+            @Override
+            public void onBefore(BaseRequest request) {
+                super.onBefore(request);
+                mNewLoadingUtil.startShowLoading();
+            }
+
+            @Override
+            public void onAfter(LogisticsData logisticsData, Exception e) {
+                super.onAfter(logisticsData, e);
+                mNewLoadingUtil.stopShowLoading();
+            }
+        });
     }
 
     @Override
@@ -143,6 +169,7 @@ public class ThirdFragment extends Fragment {
             if (null != company) {
                 Log.e(TAG, "onActivityResult: 125" + "行 = company =" + company.toString());
                 et_kuaidicompany.setText(!TextUtils.isEmpty(company.getName()) ? company.getName() : "");
+                kd_company_code = (!TextUtils.isEmpty(company.getCode()) ? company.getCode() : "");
             } else {
                 T.showLong(getActivity(), "未选择快递公司");
             }

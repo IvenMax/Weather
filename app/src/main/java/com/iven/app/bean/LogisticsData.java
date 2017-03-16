@@ -140,5 +140,15 @@ public class LogisticsData {
         public void setLocation(String location) {
             this.location = location;
         }
+
+        @Override
+        public String toString() {
+            return "DataBean{" +
+                    "time='" + time + '\'' +
+                    ", ftime='" + ftime + '\'' +
+                    ", context='" + context + '\'' +
+                    ", location='" + location + '\'' +
+                    '}';
+        }
     }
 }

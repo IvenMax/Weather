@@ -27,7 +27,7 @@ import com.iven.app.base.BaseActivity;
 import com.iven.app.bean.ActionItem;
 import com.iven.app.bean.HistoryOfTodayBean;
 import com.iven.app.fragment.NewsMainFragment;
-import com.iven.app.fragment.ThirdFragment;
+import com.iven.app.fragment.LogisticFragment;
 import com.iven.app.fragment.WeatherFragment;
 import com.iven.app.service.LocationService;
 import com.iven.app.utils.Api;
@@ -61,7 +61,7 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
     private int currentPage = 0;
     private WeatherFragment mWeatherFragment;
     private NewsMainFragment mNewsMainFragment;
-    private ThirdFragment mThirdFragment;
+    private LogisticFragment mLogisticFragment;
     private FloatingActionButton floating_button;
     private List<HistoryOfTodayBean.ResultBean> historyList;
     private MyPopWindow titlePopup;
@@ -99,10 +99,10 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
         manager = getSupportFragmentManager();
         mWeatherFragment = new WeatherFragment();
         mNewsMainFragment = new NewsMainFragment();
-        mThirdFragment = new ThirdFragment();
+        mLogisticFragment = new LogisticFragment();
         mFragmentArrayList.add(mWeatherFragment);
         mFragmentArrayList.add(mNewsMainFragment);
-        mFragmentArrayList.add(mThirdFragment);
+        mFragmentArrayList.add(mLogisticFragment);
         //悬浮按钮
         floating_button = (FloatingActionButton) findViewById(R.id.floating_button);
         floating_button.setOnClickListener(new View.OnClickListener() {
@@ -177,6 +177,7 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
         super.onCreate(savedInstanceState);
         /**-----锁屏监听-----**/
         /**-----锁屏监听-----**/
+        load_histrory();
     }
 
     /**
@@ -325,7 +326,6 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
     protected void onResume() {
         super.onResume();
         //        switchContent(null, mFragmentArrayList.get(0), "first");
-        load_histrory();
     }
 
     /**
