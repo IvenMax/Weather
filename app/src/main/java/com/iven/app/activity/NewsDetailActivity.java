@@ -2,6 +2,7 @@ package com.iven.app.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -58,7 +59,9 @@ public class NewsDetailActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+//                finish();
+                //为了实现共享元素动画，使用下边的方法结束当前页面
+                ActivityCompat.finishAfterTransition(NewsDetailActivity.this);
             }
         });
     }
