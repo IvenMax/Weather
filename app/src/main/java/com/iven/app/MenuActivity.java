@@ -17,7 +17,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -48,6 +50,9 @@ import java.util.List;
 import okhttp3.Call;
 import okhttp3.Response;
 
+import static com.iven.app.R.id.iv_navigationview_img;
+import static com.iven.app.R.id.tv_security_name;
+
 
 //27:A9:B7:28:1D:81:EE:BB:79:B2:71:58:7A:0F:2D:4C:69:31:45:01
 public class MenuActivity extends BaseActivity implements WeatherFragment.onScrollBottomListener {
@@ -67,6 +72,7 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
     private List<ActionItem> items;
     //定位
     private LocationService locationService;
+    //头布局
 
     /**
      * 锁屏监听
@@ -114,7 +120,16 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
         initTab();
         //左侧抽屉的内容的点击事件
         itemClick();
+        initHead();
         addPopWindow();
+    }
+
+    private void initHead() {
+        View headerView = navigation_view.getHeaderView(0);
+        ImageView iv_navigationview_img = (ImageView) headerView.findViewById(R.id.iv_navigationview_img);
+        TextView tv_security_name = (TextView) headerView.findViewById(R.id.tv_security_name);
+        iv_navigationview_img.setOnClickListener(this);
+        tv_security_name.setOnClickListener(this);
     }
 
     @Override
@@ -268,6 +283,12 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
             case R.id.title_right:
                 backgroundAlpha(0.7f);
                 titlePopup.show(view);
+                break;
+            case iv_navigationview_img:
+            case tv_security_name:
+                mDrawerLayout.closeDrawer(Gravity.LEFT,false);
+                ShareUtils shareUtils = new ShareUtils(MenuActivity.this);
+                shareUtils.showLogin();
                 break;
             default:
                 break;
@@ -430,7 +451,7 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
                         title_title.setText(MyApp.currentCity);
                     }
                 });
-                T.showShort(MyApp.getAppContext(),"定位成功...");
+                T.showShort(MyApp.getAppContext(), "定位成功...");
             } else {
                 T.showShort(MyApp.getAppContext(), "定位失败,请重试！");
             }

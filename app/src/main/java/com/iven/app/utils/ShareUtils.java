@@ -1,6 +1,7 @@
 package com.iven.app.utils;
 
 import android.app.Activity;
+import android.os.Handler;
 import android.view.Gravity;
 import android.widget.PopupWindow;
 
@@ -13,7 +14,7 @@ public class ShareUtils {
 
     private CustomShareBoard shareBoard;
     private Activity activity;
-
+    private CustomLoginBoard mCustomLoginBoard;
     private int which_Page = -1;
 
 
@@ -28,6 +29,11 @@ public class ShareUtils {
         this.activity = activity;
         shareBoard = new CustomShareBoard(activity, shareTitle, shareContent, shareUrl);
     }
+    //登录
+    public ShareUtils(Activity activity) {
+        this.activity = activity;
+        mCustomLoginBoard = new CustomLoginBoard(activity);
+    }
 
     /**
      * popupWindow弹窗消失的监听
@@ -36,7 +42,15 @@ public class ShareUtils {
         shareBoard.setOnDismissListener(OnDismissListener);
     }
 
-    public void show() {
+    public void showLogin() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mCustomLoginBoard.showAtLocation(activity.getWindow().getDecorView(), Gravity.CENTER, 0, 0);
+            }
+        }, 700);
+    }
+    public void show(){
         shareBoard.showAtLocation(activity.getWindow().getDecorView(), Gravity.BOTTOM, 0, 0);
         //		UmsAgent.onResume(GlobalContext.context, page);
     }
