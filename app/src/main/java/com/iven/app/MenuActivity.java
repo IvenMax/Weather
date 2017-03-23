@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -26,8 +25,8 @@ import com.google.gson.Gson;
 import com.iven.app.base.BaseActivity;
 import com.iven.app.bean.ActionItem;
 import com.iven.app.bean.HistoryOfTodayBean;
-import com.iven.app.fragment.NewsMainFragment;
 import com.iven.app.fragment.LogisticFragment;
+import com.iven.app.fragment.NewsMainFragment;
 import com.iven.app.fragment.WeatherFragment;
 import com.iven.app.service.LocationService;
 import com.iven.app.utils.Api;
@@ -423,21 +422,7 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
                 final String city = location.getCity();
                 final String district = location.getDistrict();
                 int name = 0;
-                if (!TextUtils.isEmpty(district)) {
-                    if (district.contains("区")) {
-                        name = district.indexOf("区");
-                    } else if (district.contains("市")) {
-                        name = district.indexOf("市");
-                    } else if (district.contains("县")) {
-                        name = district.indexOf("县");
-                    } else {
-                        name = district.indexOf("区");
-                    }
-                    String substring = district.substring(0, name);
-                    MyApp.currentCity = substring;
-                } else {
-                    MyApp.currentCity = city.substring(0, city.indexOf("市"));
-                }
+                MyApp.currentCity = city.substring(0, city.indexOf("市"));
                 locationService.stop();
                 title_title.post(new Runnable() {
                     @Override

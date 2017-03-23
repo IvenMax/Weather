@@ -9,6 +9,7 @@ import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheEntity;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.cookie.store.PersistentCookieStore;
+import com.tencent.bugly.crashreport.CrashReport;
 import com.umeng.socialize.Config;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
@@ -26,14 +27,20 @@ public class MyApp extends Application {
     private static Context sAppContext;
     public LocationService locationService;
     public Vibrator mVibrator;
-
+//448113a8c9
+//    e4052173-c83d-493c-85e2-91f601219c06
     @Override
     public void onCreate() {
         super.onCreate();
         sAppContext = this;
+        initBugly();
         initOkGoHttp();
         initUMeng();
         initBDLocation();
+    }
+
+    private void initBugly() {
+        CrashReport.initCrashReport(getApplicationContext(), "448113a8c9", true);
     }
 
     /***

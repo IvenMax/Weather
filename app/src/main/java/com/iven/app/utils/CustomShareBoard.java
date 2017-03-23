@@ -12,6 +12,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -97,7 +98,6 @@ public class CustomShareBoard extends PopupWindow implements OnClickListener {
                 performShare(SHARE_MEDIA.WEIXIN_CIRCLE);
                 break;
             case R.id.sina://新浪微博
-//                T.showShort(mActivity,"待续...");
                 performShare(SHARE_MEDIA.SINA);
                 break;
             case R.id.qq_friends:
@@ -108,6 +108,10 @@ public class CustomShareBoard extends PopupWindow implements OnClickListener {
                 break;
             case R.id.cancleShare:
                 this.dismiss();
+                break;
+            case R.id.tencent_wb://测试第三方登录
+                umShareAPI.getPlatformInfo(mActivity,SHARE_MEDIA.SINA,umAuthListener);
+                break;
             default:
                 break;
         }
@@ -182,12 +186,21 @@ public class CustomShareBoard extends PopupWindow implements OnClickListener {
     private UMAuthListener umAuthListener = new UMAuthListener() {
         @Override
         public void onStart(SHARE_MEDIA share_media) {
-
+            Log.e(TAG, "onStart: 187" + "行 = ");
         }
 
         @Override
         public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
-            //            Toast.makeText(mActivity, share_media + "授权成功", Toast.LENGTH_SHORT).show();
+
+            Log.e(TAG, "onComplete: 194" + "行 = ");
+            if (null != map){
+                String uid = map.get("uid");
+                Log.e(TAG, "onComplete: 197" + "行 = uid == "+uid);
+                Log.e(TAG, "onComplete: 197" + "行 = name == "+map.get("name"));
+                Log.e(TAG, "onComplete: 197" + "行 = gender == "+map.get("gender"));
+                Log.e(TAG, "onComplete: 197" + "行 = iconurl == "+map.get("iconurl"));
+            }
+//                        Toast.makeText(mActivity, share_media + "授权成功", Toast.LENGTH_SHORT).show();
 
             //            if (SHARE_MEDIA.SINA.equals(share_media)) {
             //                umShareAPI.getFriend(mActivity, SHARE_MEDIA.SINA, new MyUMFriendListener());
@@ -196,14 +209,17 @@ public class CustomShareBoard extends PopupWindow implements OnClickListener {
 
         @Override
         public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
+            Log.e(TAG, "onError: 204" + "行 = ");
             //            Toast.makeText(mActivity, "onError", Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onCancel(SHARE_MEDIA share_media, int i) {
-            //            Toast.makeText(mActivity, share_media + "取消授权", Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "onCancel: 210" + "行 = ");
+            Toast.makeText(mActivity, share_media + "取消授权", Toast.LENGTH_SHORT).show();
         }
     };
+
     //发短信
     private void sendSMS() {
         Uri smsToUri = Uri.parse("smsto:");

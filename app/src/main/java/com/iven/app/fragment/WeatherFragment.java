@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -30,6 +31,7 @@ import com.iven.app.bean.TotalWeatherBean;
 import com.iven.app.okgo.JsonCallback;
 import com.iven.app.utils.Api;
 import com.iven.app.utils.Constant;
+import com.iven.app.utils.DialogUtils;
 import com.iven.app.utils.IconSetting;
 import com.iven.app.utils.NewLoadingUtil;
 import com.iven.app.utils.RexUtils;
@@ -88,6 +90,7 @@ public class WeatherFragment extends Fragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
         http_request(MyApp.currentCity);
     }
+
     //实例化组件
     private void init(View view) {
         tv_now_tmp = (TextView) view.findViewById(R.id.tv_now_tmp);
@@ -159,6 +162,12 @@ public class WeatherFragment extends Fragment implements View.OnClickListener {
             public void onSuccess(TotalWeatherBean totalWeatherBean, Call call, Response response) {
                 List<TotalWeatherBean.HeWeather5Bean> heWeather5 = totalWeatherBean.getHeWeather5();
                 TotalWeatherBean.HeWeather5Bean heWeather5Bean = heWeather5.get(0);
+                String status = heWeather5Bean.getStatus();
+                if (!TextUtils.equals("ok", status)) {//不是OK，说明城市不行
+                    T.showLong(getActivity().getApplicationContext(), "暂不支持当前城市");
+//                    go2SelectCity();
+                    return;
+                }
                 List<TotalWeatherBean.HeWeather5Bean.DailyForecastBean> daily_forecast = heWeather5Bean.getDaily_forecast();
                 int size = daily_forecast.size();
                 for (int i = 0; i < size; i++) {
@@ -202,6 +211,26 @@ public class WeatherFragment extends Fragment implements View.OnClickListener {
                 T.showLong(getActivity(), "更新失败");
             }
         });
+    }
+
+    //手动去选择城市
+    private void go2SelectCity() {
+        final DialogUtils dialogUtils = new DialogUtils(getActivity().getApplicationContext(), false);
+        dialogUtils.setDialogVerify(getActivity().getApplicationContext(), "手动", "暂不支持当前城市,请手动选择", null, "取消", "确认", null, false, null, new DialogUtils.DialogClickListener() {
+            @Override
+            public void leftEvent() {
+                dialogUtils.closeDilog();
+            }
+
+            @Override
+            public void rightEvent() {
+                String edittextContent = dialogUtils.getEdittextContent();
+                MyApp.currentCity = edittextContent;
+                Log.e(TAG, "rightEvent: 229" + "行 = "+edittextContent);
+                http_request(MyApp.currentCity);
+            }
+        });
+        dialogUtils.showAliasDialog();
     }
 
     /**
@@ -251,6 +280,7 @@ public class WeatherFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onRefresh() {
                 mPullToRefreshView.setRefreshing(false);
+
                 http_request(MyApp.currentCity);
             }
 
