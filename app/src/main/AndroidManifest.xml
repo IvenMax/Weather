@@ -104,7 +104,9 @@
             android:enabled="true"
             android:process=":remote">
         </service>
-
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="${UMENG_CHANNEL_VALUE}" />
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="Qf66y5ws8WYPReE15Vr0OI2dD2nnEgOu"/>
