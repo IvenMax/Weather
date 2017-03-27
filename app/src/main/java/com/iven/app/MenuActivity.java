@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -27,19 +28,24 @@ import com.google.gson.Gson;
 import com.iven.app.base.BaseActivity;
 import com.iven.app.bean.ActionItem;
 import com.iven.app.bean.HistoryOfTodayBean;
+import com.iven.app.bean.User;
 import com.iven.app.fragment.LogisticFragment;
 import com.iven.app.fragment.NewsMainFragment;
 import com.iven.app.fragment.WeatherFragment;
 import com.iven.app.service.LocationService;
 import com.iven.app.utils.Api;
+import com.iven.app.utils.Constant;
 import com.iven.app.utils.DialogUtils;
+import com.iven.app.utils.JSONUtil;
 import com.iven.app.utils.NetworkUtils;
+import com.iven.app.utils.SPUtils;
 import com.iven.app.utils.ShareUtils;
 import com.iven.app.utils.T;
 import com.iven.app.view.HistoryDialogFragment;
 import com.iven.app.view.MyPopWindow;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
+import com.squareup.picasso.Picasso;
 import com.umeng.socialize.UMShareAPI;
 
 import java.text.SimpleDateFormat;
@@ -49,9 +55,6 @@ import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Response;
-
-import static com.iven.app.R.id.iv_navigationview_img;
-import static com.iven.app.R.id.tv_security_name;
 
 
 //27:A9:B7:28:1D:81:EE:BB:79:B2:71:58:7A:0F:2D:4C:69:31:45:01
@@ -73,6 +76,8 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
     //定位
     private LocationService locationService;
     //头布局
+    TextView tv_security_name;
+    ImageView iv_navigationview_img;
 
     /**
      * 锁屏监听
@@ -126,8 +131,8 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
 
     private void initHead() {
         View headerView = navigation_view.getHeaderView(0);
-        ImageView iv_navigationview_img = (ImageView) headerView.findViewById(R.id.iv_navigationview_img);
-        TextView tv_security_name = (TextView) headerView.findViewById(R.id.tv_security_name);
+        iv_navigationview_img = (ImageView) headerView.findViewById(R.id.iv_navigationview_img);
+        tv_security_name = (TextView) headerView.findViewById(R.id.tv_security_name);
         iv_navigationview_img.setOnClickListener(this);
         tv_security_name.setOnClickListener(this);
     }
@@ -276,6 +281,7 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
             case R.id.title_left:
                 if (!mDrawerLayout.isDrawerOpen(navigation_view)) {
                     mDrawerLayout.openDrawer(Gravity.LEFT);
+                    setLoginOrLogout(1);
                 } else {
                     mDrawerLayout.closeDrawer(Gravity.LEFT);
                 }
@@ -284,9 +290,9 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
                 backgroundAlpha(0.7f);
                 titlePopup.show(view);
                 break;
-            case iv_navigationview_img:
-            case tv_security_name:
-                mDrawerLayout.closeDrawer(Gravity.LEFT,false);
+            case R.id.iv_navigationview_img:
+            case R.id.tv_security_name:
+                mDrawerLayout.closeDrawer(Gravity.LEFT, false);
                 ShareUtils shareUtils = new ShareUtils(MenuActivity.this);
                 shareUtils.showLogin();
                 break;
@@ -294,6 +300,30 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
                 break;
         }
 
+    }
+
+    /**
+     * 三方登录之后设置用户名以及LOGO
+     *
+     * @param type 1:登录   2 ：登出
+     */
+
+    private void setLoginOrLogout(int type) {
+        String string = SPUtils.getString(this, Constant.USER_JSON, "艺名");
+        if (!TextUtils.isEmpty(string)) {
+            if (!TextUtils.equals(string, "艺名")) {
+                if (type == 1) {
+                    User user = JSONUtil.fromJson(string, User.class);
+                    tv_security_name.setText(user.getName());
+                    Picasso.with(this).load(user.getIconUrl()).into(iv_navigationview_img);
+                }else if (type == 2){
+                    T.showLong(MenuActivity.this,getResources().getString(R.string.tuichu));
+                    SPUtils.remove(this,Constant.USER_JSON);
+                    tv_security_name.setText(R.string.see_you);
+                    iv_navigationview_img.setImageResource(R.mipmap.iven_logo);//不要使用setBackgroundResource,不管用 - -
+                }
+            }
+        }
     }
 
     /**
@@ -312,6 +342,9 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
                         break;
                     case R.id.menu_03:
                         mTabLayout.getTabAt(2).select();
+                        break;
+                    case R.id.menu_05://登出
+                        setLoginOrLogout(2);
                         break;
                     default:
                         break;
@@ -342,11 +375,6 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //        switchContent(null, mFragmentArrayList.get(0), "first");
-    }
 
     /**
      * ScrollVie滑动到底部回调监听
@@ -430,6 +458,20 @@ public class MenuActivity extends BaseActivity implements WeatherFragment.onScro
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);//完成回调
+        //        SPUtils.putString(this, Constant.USER_JSON, JSONUtil.toJSON())
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //        switchContent(null, mFragmentArrayList.get(0), "first");
+        /*String string = SPUtils.getString(this, Constant.USER_JSON, "艺名");
+        if (!TextUtils.isEmpty(string)){
+            User user = JSONUtil.fromJson(string, User.class);
+            tv_security_name.setText(user.getName());
+            Picasso.with(this).load(user.getIconUrl()).into(iv_navigationview_img);
+        }*/
+
     }
 
     private BDLocationListener mListener = new BDLocationListener() {

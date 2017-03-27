@@ -18,6 +18,8 @@ public class Constant {
     public static final String NEWS_IMG_RES = "news_img_res";
     public static final int RESULT_CODE = 1009;
     public static final String FLAG_COMPANY = "company";
+    public static final String USER_FLG = "user_flg";
+    public static final String USER_JSON = "user_json";
 
 
     public static  ArrayList<CompanyBean> getWLINfo() {

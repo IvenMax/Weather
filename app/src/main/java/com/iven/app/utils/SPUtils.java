@@ -31,8 +31,15 @@ import android.content.SharedPreferences;
  */
 public class SPUtils {
 
-    public static String PREFERENCE_NAME = "shop";
+    public static String PREFERENCE_NAME = "user_info";
 
+
+    public static boolean remove(Context context,String key){
+        SharedPreferences settings = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.remove(key);
+        return editor.commit();
+    }
     /**
      * put string preferences
      * 

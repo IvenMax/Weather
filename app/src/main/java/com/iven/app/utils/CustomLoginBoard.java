@@ -16,6 +16,7 @@ import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.iven.app.R;
+import com.iven.app.bean.User;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -104,10 +105,13 @@ public class CustomLoginBoard extends PopupWindow implements OnClickListener {
 
             if (null != map) {
                 String uid = map.get("uid");
-                Log.e(TAG, "onComplete: 197" + "行 = uid == " + uid);
-                Log.e(TAG, "onComplete: 197" + "行 = name == " + map.get("name"));
-                Log.e(TAG, "onComplete: 197" + "行 = gender == " + map.get("gender"));
-                Log.e(TAG, "onComplete: 197" + "行 = iconurl == " + map.get("iconurl"));
+                User user = new User();
+                user.setUid(map.get("uid"));
+                user.setName(map.get("name"));
+                user.setIconUrl(map.get("iconurl"));
+                String json = JSONUtil.toJSON(user);
+                SPUtils.putString(mActivity,Constant.USER_JSON,json);//将用户信息保存到SP中去
+                Log.e(TAG, "登录成功-保存的用户信息   ===    "+json);
             }
         }
 

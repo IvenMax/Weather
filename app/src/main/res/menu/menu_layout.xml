@@ -19,5 +19,5 @@
     <item
         android:id="@+id/menu_05"
         android:icon="@mipmap/menu05"
-        android:title="005"/>
+        android:title="登出"/>
 </menu>

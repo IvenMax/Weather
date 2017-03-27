@@ -163,10 +163,14 @@ public class NewsFragment extends BaseFragment {
 
             @Override
             public void onError(Throwable e) {
-                T.showShort(getActivity(), e.getMessage());
+                Log.e(TAG, "onError: 167" + "行 = " + "   " + e.getMessage());
+                if (e.getMessage().contains("403")) {
+                    T.showShort(getActivity(), "接口异常");
+                }
                 mNewLoadingUtil.stopShowLoading();
                 swiperefreshlayout.setRefreshing(false);
             }
+
 
 
             @Override

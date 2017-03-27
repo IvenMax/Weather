@@ -99,7 +99,9 @@ public class NewsDetailActivity extends AppCompatActivity {
             @Override
             public void onError(Throwable e) {
                 mNewLoadingUtil.stopShowLoading();
-                T.showShort(NewsDetailActivity.this, e.getMessage());
+                if (e.getMessage().contains("403")){
+                    T.showShort(NewsDetailActivity.this, "接口异常");
+                }
             }
 
             @Override
